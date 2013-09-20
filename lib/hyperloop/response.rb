@@ -1,9 +1,6 @@
-module Hyperloop
-  class Response
-    attr_reader :body
+require 'rack'
 
-    def initialize(body)
-      @body = body
-    end
+module Hyperloop
+  class Response < Rack::Response
   end
 end
