@@ -1,3 +1,5 @@
+require 'hyperloop'
+
 describe Hyperloop::Response do
   it 'has a body' do
     response = Hyperloop::Response.new('irrelevant')

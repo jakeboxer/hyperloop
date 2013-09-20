@@ -1,3 +1,4 @@
+require "hyperloop/response"
 require "hyperloop/version"
 
 module Hyperloop
