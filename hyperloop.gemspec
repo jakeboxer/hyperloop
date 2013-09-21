@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Hyperloop::VERSION
   spec.authors       = ["Jake Boxer"]
   spec.email         = ["jake@github.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{Hyperloop lets you make simple websites with a technology stack familiar to Rails programmers.}
+  spec.summary       = %q{Make simple websites with Rails conventions and conveniences.}
   spec.homepage      = ""
   spec.license       = "MIT"
 

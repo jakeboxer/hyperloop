@@ -1,6 +1,6 @@
 # Hyperloop
 
-TODO: Write a gem description
+Make simple websites with a technology stack familiar to Rails programmers.
 
 ## Installation
 
