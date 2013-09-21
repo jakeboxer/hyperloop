@@ -6,7 +6,14 @@ module Hyperloop
 
     def initialize(root=nil)
       @root       = root
-      @views_path = File.join([@root, 'app/views'].compact)
+      @views_root = File.join([@root, 'app/views'].compact)
+
+      # Load all the views
+      paths  = Dir.glob(@views_root + '/**/*').reject {|fn| File.directory?(fn)}
+      @views = paths.inject({}) do |result, path|
+        result[path] = View.new(path)
+        result
+      end
     end
 
     # Rack call interface.
@@ -15,12 +22,12 @@ module Hyperloop
       response = Response.new
       path     = view_path(request)
 
-      if File.exist?(path)
-        # If there's a file at the view path, use its data as the response body.
-        data = File.read(path)
+      if view = @views[path]
+        # If there's a view at the path, use its data as the response body.
+        data = view.render
         response.write(data)
       else
-        # If there's no file at the view path, 404.
+        # If there's no view at the path, 404.
         response.status = 404
       end
 
@@ -35,7 +42,7 @@ module Hyperloop
     #
     # Returns a String.
     def view_path(request)
-      path = File.join(@views_path, request.path).chomp('/')
+      path = File.join(@views_root, request.path).chomp('/')
 
       # If we're currently pointing to a directory, get index in it.
       path = File.join(path, 'index') if Dir.exist?(path)
