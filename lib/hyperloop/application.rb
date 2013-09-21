@@ -19,7 +19,8 @@ module Hyperloop
       @response = Response.new
 
       filename = @request.path.gsub(/^\//, '')
-      filename = 'index.html' if filename.empty?
+      filename = 'index' if filename.empty?
+      filename += '.html'
 
       if views.include?(filename)
         @response.write(File.read(File.join(@views_path, filename)))
