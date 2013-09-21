@@ -4,12 +4,9 @@ module Hyperloop
   class Application
     include Rack::Utils
 
-    attr_reader :views
-
     def initialize(root='')
       @root       = root
       @views_path = File.join(@root, 'app/views')
-      @views      = Dir.entries(@views_path) - %w(. ..)
     end
 
     # Rack call interface.
@@ -18,13 +15,13 @@ module Hyperloop
       @request  = Rack::Request.new(@env)
       @response = Response.new
 
-      filename = @request.path.gsub(/^\//, '')
-      filename = 'index' if filename.empty?
-      filename += '.html'
+      file_name = @request.path.gsub(/^\//, '')
+      file_name = 'index' if file_name.empty?
+      file_name += '.html'
+      file_path = File.join(@views_path, file_name)
 
-      if views.include?(filename)
-        path = File.join(@views_path, filename)
-        @response.write(File.read(path))
+      if File.exist?(file_path)
+        @response.write(File.read(file_path))
       else
         @response.status = 404
       end

@@ -6,10 +6,6 @@ describe Hyperloop::Application do
     @app  = Hyperloop::Application.new(@root)
   end
 
-  it 'finds the index view' do
-    expect(@app.views).to match_array(%w(index.html about.html))
-  end
-
   it 'responds successfully to a request for root' do
     request = Rack::MockRequest.new(@app)
     response = request.get('/')
