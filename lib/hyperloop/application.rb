@@ -7,15 +7,25 @@ module Hyperloop
     attr_reader :views
 
     def initialize(root='')
-      @root  = root
-      @views = Dir.entries(@root + 'app/views') - %w(. ..)
+      @root       = root
+      @views_path = File.join(@root, 'app/views')
+      @views      = Dir.entries(@views_path) - %w(. ..)
     end
 
     # Rack call interface.
     def call(env)
       @env      = env
-      @request  = Request.new(env)
+      @request  = Rack::Request.new(@env)
       @response = Response.new
+
+      filename = @request.path.gsub(/^\//, '')
+      filename = 'index.html' if filename.empty?
+
+      if views.include?(filename)
+        @response.write(File.read(File.join(@views_path, filename)))
+      end
+
+      @response.finish
     end
   end
 end

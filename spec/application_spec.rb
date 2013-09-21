@@ -9,4 +9,12 @@ describe Hyperloop::Application do
   it 'finds the index view' do
     expect(@app.views).to eql(['index.html'])
   end
+
+  it 'responds successfully to a request for root' do
+    request = Rack::MockRequest.new(@app)
+    response = request.get('/')
+
+    expect(response).to be_ok
+    expect(response.body).to match(/<html>/)
+  end
 end
