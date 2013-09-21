@@ -1,3 +1,4 @@
+require "hyperloop/application"
 require "hyperloop/response"
 require "hyperloop/version"
 
