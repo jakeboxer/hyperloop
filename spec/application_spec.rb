@@ -25,4 +25,11 @@ describe Hyperloop::Application do
     expect(response).to be_ok
     expect(response.body).to match(/<h1>About/)
   end
+
+  it '404s on a request for a nonexistent page' do
+    request = Rack::MockRequest.new(@app)
+    response = request.get('/nonexistent')
+
+    expect(response).to be_not_found
+  end
 end

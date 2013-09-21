@@ -24,6 +24,8 @@ module Hyperloop
 
       if views.include?(filename)
         @response.write(File.read(File.join(@views_path, filename)))
+      else
+        @response.status = 404
       end
 
       @response.finish
