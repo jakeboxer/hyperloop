@@ -11,23 +11,22 @@ module Hyperloop
 
     # Rack call interface.
     def call(env)
-      @env      = env
-      @request  = Rack::Request.new(@env)
-      @response = Response.new
+      request  = Rack::Request.new(env)
+      response = Response.new
 
-      path = File.join(@views_path, @request.path).chomp('/')
+      path = File.join(@views_path, request.path).chomp('/')
 
       # If we're currently pointing to a directory, get index in it.
       path = File.join(path, 'index') if Dir.exist?(path)
       path += '.html'
 
       if File.exist?(path)
-        @response.write(File.read(path))
+        response.write(File.read(path))
       else
-        @response.status = 404
+        response.status = 404
       end
 
-      @response.finish
+      response.finish
     end
   end
 end
