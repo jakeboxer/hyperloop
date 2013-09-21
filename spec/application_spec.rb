@@ -1,31 +1,30 @@
 require 'hyperloop'
 
 describe Hyperloop::Application do
-  before :each do
-    @root = 'spec/fixtures/simple/'
-    @app  = Hyperloop::Application.new(@root)
-  end
+  describe 'with a flat views directory' do
+    before :each do
+      @app     = Hyperloop::Application.new('spec/fixtures/simple/')
+      @request = Rack::MockRequest.new(@app)
+    end
 
-  it 'responds successfully to a request for root' do
-    request = Rack::MockRequest.new(@app)
-    response = request.get('/')
+    it 'responds successfully to a request for root' do
+      response = @request.get('/')
 
-    expect(response).to be_ok
-    expect(response.body).to match(/<h1>Simple/)
-  end
+      expect(response).to be_ok
+      expect(response.body).to match(/<h1>Simple/)
+    end
 
-  it 'responds successfully to a request for a different page' do
-    request = Rack::MockRequest.new(@app)
-    response = request.get('/about')
+    it 'responds successfully to a request for a different page' do
+      response = @request.get('/about')
 
-    expect(response).to be_ok
-    expect(response.body).to match(/<h1>About/)
-  end
+      expect(response).to be_ok
+      expect(response.body).to match(/<h1>About/)
+    end
 
-  it '404s on a request for a nonexistent page' do
-    request = Rack::MockRequest.new(@app)
-    response = request.get('/nonexistent')
+    it '404s on a request for a nonexistent page' do
+      response = @request.get('/nonexistent')
 
-    expect(response).to be_not_found
+      expect(response).to be_not_found
+    end
   end
 end
