@@ -27,4 +27,25 @@ describe Hyperloop::Application do
       expect(response).to be_not_found
     end
   end
+
+  describe 'with subdirectories' do
+    before :each do
+      @app     = Hyperloop::Application.new('spec/fixtures/subdirectories/')
+      @request = Rack::MockRequest.new(@app)
+    end
+
+    it 'responds successfully to a request for the subdirectory root' do
+      response = @request.get('/subdir1')
+
+      expect(response).to be_ok
+      expect(response.body).to match(/<h1>Subdirectory Index/)
+    end
+
+    it 'responds successfully to a request for a different page in the subdirectory' do
+      response = @request.get('/subdir1/kanye')
+
+      expect(response).to be_ok
+      expect(response.body).to match(/<h1>Hurry up with my damn croissant/)
+    end
+  end
 end

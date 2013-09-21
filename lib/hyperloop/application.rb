@@ -15,13 +15,14 @@ module Hyperloop
       @request  = Rack::Request.new(@env)
       @response = Response.new
 
-      file_name = @request.path.gsub(/^\//, '')
-      file_name = 'index' if file_name.empty?
-      file_name += '.html'
-      file_path = File.join(@views_path, file_name)
+      path = File.join(@views_path, @request.path).chomp('/')
 
-      if File.exist?(file_path)
-        @response.write(File.read(file_path))
+      # If we're currently pointing to a directory, get index in it.
+      path = File.join(path, 'index') if Dir.exist?(path)
+      path += '.html'
+
+      if File.exist?(path)
+        @response.write(File.read(path))
       else
         @response.status = 404
       end
