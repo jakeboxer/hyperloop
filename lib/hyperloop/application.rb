@@ -4,9 +4,9 @@ module Hyperloop
   class Application
     include Rack::Utils
 
-    def initialize(root='')
+    def initialize(root=nil)
       @root       = root
-      @views_path = File.join(@root, 'app/views')
+      @views_path = File.join([@root, 'app/views'].compact)
     end
 
     # Rack call interface.
