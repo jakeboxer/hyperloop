@@ -23,7 +23,8 @@ module Hyperloop
       filename += '.html'
 
       if views.include?(filename)
-        @response.write(File.read(File.join(@views_path, filename)))
+        path = File.join(@views_path, filename)
+        @response.write(File.read(path))
       else
         @response.status = 404
       end
