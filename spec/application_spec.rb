@@ -48,4 +48,18 @@ describe Hyperloop::Application do
       expect(response.body).to match(/<h1>Hurry up with my damn croissant/)
     end
   end
+
+  describe 'with ERB' do
+    before :each do
+      @app     = Hyperloop::Application.new('spec/fixtures/erb/')
+      @request = Rack::MockRequest.new(@app)
+    end
+
+    it 'renders embedded Ruby in the root page' do
+      response = @request.get('/')
+
+      expect(response).to be_ok
+      expect(response.body).to match(/<h1>WE ARE USING ERB/)
+    end
+  end
 end
