@@ -6,21 +6,49 @@ module Hyperloop
 
     def initialize(root=nil)
       @root       = root
-      @views_path = File.join([@root, 'app/views'].compact)
+      @views_root = File.join([@root, 'app/views'].compact)
+
+      # Get all the view paths. These look like:
+      #
+      # some/path/app/views/whatever.html.erb
+      # some/path/app/views/subdir/whatever.html.erb
+      paths  = Dir.glob(@views_root + '/**/*').reject {|fn| File.directory?(fn)}
+
+      @views = paths.inject({}) do |result, path|
+        view = View.new(path)
+
+        # The path under app/views. This will be something like:
+        #
+        # /whatever.html.erb
+        # /subdir/whatever.html.erb
+        relative_path = path.sub(@views_root, '')
+
+        # The path under app/views without a file extension. This will be
+        # something like:
+        #
+        # /whatever
+        # /subdir/whatever
+        request_dir  = File.split(relative_path).first
+        request_path = File.join(request_dir, view.name)
+
+        result[request_path] = view
+        result[request_dir]  = view if view.name == 'index'
+
+        result
+      end
     end
 
     # Rack call interface.
     def call(env)
       request  = Rack::Request.new(env)
       response = Response.new
-      path     = view_path(request)
 
-      if File.exist?(path)
-        # If there's a file at the view path, use its data as the response body.
-        data = File.read(path)
+      if view = @views[normalized_request_path(request.path)]
+        # If there's a view at the path, use its data as the response body.
+        data = view.render
         response.write(data)
       else
-        # If there's no file at the view path, 404.
+        # If there's no view at the path, 404.
         response.status = 404
       end
 
@@ -29,17 +57,17 @@ module Hyperloop
 
     private
 
-    # Internal: Get the view path for the specified request.
+    # Internal: Get a normalized version of the specified request path.
     #
-    # request - Rack::Request to get the view path for.
+    # path - Request path to normalize
     #
-    # Returns a String.
-    def view_path(request)
-      path = File.join(@views_path, request.path).chomp('/')
-
-      # If we're currently pointing to a directory, get index in it.
-      path = File.join(path, 'index') if Dir.exist?(path)
-      path + '.html'
+    # Returns a string.
+    def normalized_request_path(path)
+      if path == '/'
+        path
+      else
+        path.chomp('/')
+      end
     end
   end
 end
