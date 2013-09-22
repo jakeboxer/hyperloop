@@ -9,7 +9,9 @@ module Hyperloop
       @views_root = File.join([@root, 'app/views'].compact)
 
       # Get all the view paths. These look like:
+      #
       # some/path/app/views/whatever.html.erb
+      # some/path/app/views/subdir/whatever.html.erb
       paths  = Dir.glob(@views_root + '/**/*').reject {|fn| File.directory?(fn)}
 
       @views = paths.inject({}) do |result, path|

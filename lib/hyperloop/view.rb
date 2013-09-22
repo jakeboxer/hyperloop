@@ -8,6 +8,9 @@ module Hyperloop
       @format    = File.extname(@full_path)[1..-1]
     end
 
+    # Public: Render the view.
+    #
+    # Returns a string.
     def render
       case @format
       when 'html'
