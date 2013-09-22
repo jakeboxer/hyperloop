@@ -16,5 +16,13 @@ module Hyperloop
         ERB.new(@data).result
       end
     end
+
+    # Public: The name of the view. Derived from the view's filename without
+    # any extensions. Not guaranteed to be unique amongst other views in an app.
+    #
+    # Returns a string.
+    def name
+      @name ||= File.basename(@full_path).split('.').first
+    end
   end
 end
