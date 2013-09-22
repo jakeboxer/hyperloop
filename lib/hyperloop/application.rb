@@ -41,7 +41,7 @@ module Hyperloop
       request  = Rack::Request.new(env)
       response = Response.new
 
-      if view = @views[request.path]
+      if view = @views[normalized_request_path(request.path)]
         # If there's a view at the path, use its data as the response body.
         data = view.render
         response.write(data)
@@ -51,6 +51,21 @@ module Hyperloop
       end
 
       response.finish
+    end
+
+    private
+
+    # Internal: Get a normalized version of the specified request path.
+    #
+    # path - Request path to normalize
+    #
+    # Returns a string.
+    def normalized_request_path(path)
+      if path == '/'
+        path
+      else
+        path.chomp('/')
+      end
     end
   end
 end

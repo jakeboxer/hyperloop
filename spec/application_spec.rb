@@ -21,6 +21,13 @@ describe Hyperloop::Application do
       expect(response.body).to match(/<h1>About/)
     end
 
+    it 'responds successfully to a request with a trailing slash' do
+      response = @request.get('/about/')
+
+      expect(response).to be_ok
+      expect(response.body).to match(/<h1>About/)
+    end
+
     it '404s on a request for a nonexistent page' do
       response = @request.get('/nonexistent')
 
