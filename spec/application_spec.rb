@@ -1,4 +1,4 @@
-require 'hyperloop'
+require File.expand_path('../spec_helper', __FILE__)
 
 describe Hyperloop::Application do
   describe 'with a flat views directory' do
