@@ -1,4 +1,4 @@
-# Hyperloop
+# Hyperloop [![Build Status](https://travis-ci.org/jakeboxer/hyperloop.png?branch=master)](https://travis-ci.org/jakeboxer/hyperloop)
 
 Make simple websites with a technology stack familiar to Rails programmers.
 
