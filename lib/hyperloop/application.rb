@@ -8,10 +8,30 @@ module Hyperloop
       @root       = root
       @views_root = File.join([@root, 'app/views'].compact)
 
-      # Load all the views
+      # Get all the view paths. These look like:
+      # some/path/app/views/whatever.html.erb
       paths  = Dir.glob(@views_root + '/**/*').reject {|fn| File.directory?(fn)}
+
       @views = paths.inject({}) do |result, path|
-        result[path] = View.new(path)
+        view = View.new(path)
+
+        # The path under app/views. This will be something like:
+        #
+        # /whatever.html.erb
+        # /subdir/whatever.html.erb
+        relative_path = path.sub(@views_root, '')
+
+        # The path under app/views without a file extension. This will be
+        # something like:
+        #
+        # /whatever
+        # /subdir/whatever
+        request_dir  = File.split(relative_path).first
+        request_path = File.join(request_dir, view.name)
+
+        result[request_path] = view
+        result[request_dir]  = view if view.name == 'index'
+
         result
       end
     end
@@ -20,9 +40,8 @@ module Hyperloop
     def call(env)
       request  = Rack::Request.new(env)
       response = Response.new
-      path     = view_path(request)
 
-      if view = @views[path]
+      if view = @views[request.path]
         # If there's a view at the path, use its data as the response body.
         data = view.render
         response.write(data)
@@ -32,21 +51,6 @@ module Hyperloop
       end
 
       response.finish
-    end
-
-    private
-
-    # Internal: Get the view path for the specified request.
-    #
-    # request - Rack::Request to get the view path for.
-    #
-    # Returns a String.
-    def view_path(request)
-      path = File.join(@views_root, request.path).chomp('/')
-
-      # If we're currently pointing to a directory, get index in it.
-      path = File.join(path, 'index') if Dir.exist?(path)
-      path + '.html'
     end
   end
 end
