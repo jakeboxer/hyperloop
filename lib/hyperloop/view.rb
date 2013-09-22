@@ -5,7 +5,13 @@ module Hyperloop
     def initialize(full_path)
       @full_path = full_path
       @data      = File.read(@full_path)
-      @format    = File.extname(@full_path)[1..-1]
+    end
+
+    # Public: The format of the view. Derived from the view's extension.
+    #
+    # Returns a string.
+    def format
+      @format ||= File.extname(@full_path)[1..-1].intern
     end
 
     # Public: The name of the view. Derived from the view's filename without
@@ -20,10 +26,10 @@ module Hyperloop
     #
     # Returns a string.
     def render
-      case @format
-      when 'html'
+      case format
+      when :html
         @data
-      when 'erb'
+      when :erb
         ERB.new(@data).result
       end
     end

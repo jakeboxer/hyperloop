@@ -1,6 +1,18 @@
 require 'hyperloop'
 
 describe Hyperloop::View do
+  describe '#format' do
+    it 'is :html for HTML files' do
+      view = Hyperloop::View.new('spec/fixtures/simple/app/views/about.html')
+      expect(view.format).to eql(:html)
+    end
+
+    it 'is :erb for ERB files' do
+      view = Hyperloop::View.new('spec/fixtures/erb/app/views/about.html.erb')
+      expect(view.format).to eql(:erb)
+    end
+  end
+
   describe '#name' do
     it 'strips the extension from plain HTML files' do
       view = Hyperloop::View.new('spec/fixtures/simple/app/views/about.html')
