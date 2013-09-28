@@ -83,5 +83,13 @@ describe Hyperloop::Application do
       expect(text_in(response.body, 'h1')).to eql('Layout Header')
       expect(text_in(response.body, 'h2')).to eql('This is the root page!')
     end
+
+    it 'renders subdirectory views within the layout' do
+      response = @request.get('/subdir')
+
+      expect(response).to be_ok
+      expect(text_in(response.body, 'h1')).to eql('Layout Header')
+      expect(text_in(response.body, 'h2')).to eql('This is a page in a subdirectory!')
+    end
   end
 end
