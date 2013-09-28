@@ -28,11 +28,11 @@ describe Hyperloop::View do
 
   describe '#render' do
     it 'renders plain HTML files' do
-      expect(@html_view.render).to match(/<h1>About/)
+      expect(text_in(@html_view.render, 'h1')).to eql('About')
     end
 
     it 'renders ERB files' do
-      expect(@erb_view.render).to match(/<h1>I was born on December 21/)
+      expect(text_in(@erb_view.render, 'h1')).to match('I was born on December 21')
     end
   end
 end
