@@ -69,4 +69,19 @@ describe Hyperloop::Application do
       expect(text_in(response.body, 'h1')).to eql('WE ARE USING ERB')
     end
   end
+
+  describe 'with a layout' do
+    before :each do
+      @app     = Hyperloop::Application.new('spec/fixtures/layouts/')
+      @request = Rack::MockRequest.new(@app)
+    end
+
+    it 'renders the root view within the layout' do
+      response = @request.get('/')
+
+      expect(response).to be_ok
+      expect(text_in(response.body, 'h1')).to eql('Layout header')
+      expect(text_in(response.body, 'h2')).to eql('This is the root page!')
+    end
+  end
 end
