@@ -11,21 +11,21 @@ describe Hyperloop::Application do
       response = @request.get('/')
 
       expect(response).to be_ok
-      expect(response.body).to match(/<h1>Simple/)
+      expect(text_in(response.body, 'h1')).to eql('Simple')
     end
 
     it 'responds successfully to a request for a different page' do
       response = @request.get('/about')
 
       expect(response).to be_ok
-      expect(response.body).to match(/<h1>About/)
+      expect(text_in(response.body, 'h1')).to eql('About')
     end
 
     it 'responds successfully to a request with a trailing slash' do
       response = @request.get('/about/')
 
       expect(response).to be_ok
-      expect(response.body).to match(/<h1>About/)
+      expect(text_in(response.body, 'h1')).to eql('About')
     end
 
     it '404s on a request for a nonexistent page' do
@@ -45,14 +45,14 @@ describe Hyperloop::Application do
       response = @request.get('/subdir1')
 
       expect(response).to be_ok
-      expect(response.body).to match(/<h1>Subdirectory Index/)
+      expect(text_in(response.body, 'h1')).to eql('Subdirectory Index')
     end
 
     it 'responds successfully to a request for a different page in the subdirectory' do
       response = @request.get('/subdir1/kanye')
 
       expect(response).to be_ok
-      expect(response.body).to match(/<h1>Hurry up with my damn croissant/)
+      expect(text_in(response.body, 'h1')).to eql('Hurry up with my damn croissant')
     end
   end
 
@@ -66,7 +66,7 @@ describe Hyperloop::Application do
       response = @request.get('/')
 
       expect(response).to be_ok
-      expect(response.body).to match(/<h1>WE ARE USING ERB/)
+      expect(text_in(response.body, 'h1')).to eql('WE ARE USING ERB')
     end
   end
 end
