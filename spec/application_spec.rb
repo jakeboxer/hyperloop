@@ -80,7 +80,7 @@ describe Hyperloop::Application do
       response = @request.get('/')
 
       expect(response).to be_ok
-      expect(text_in(response.body, 'h1')).to eql('Layout header')
+      expect(text_in(response.body, 'h1')).to eql('Layout Header')
       expect(text_in(response.body, 'h2')).to eql('This is the root page!')
     end
   end

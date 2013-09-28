@@ -2,9 +2,10 @@ require 'erb'
 
 module Hyperloop
   class View
-    def initialize(full_path)
-      @full_path = full_path
-      @data      = File.read(@full_path)
+    def initialize(full_path, layout_path=nil)
+      @full_path   = full_path
+      @data        = File.read(@full_path)
+      @layout_data = File.read(layout_path) if layout_path && File.file?(layout_path)
     end
 
     # Public: The format of the view. Derived from the view's extension.
@@ -30,8 +31,18 @@ module Hyperloop
       when :html
         @data
       when :erb
-        ERB.new(@data).result
+        if @layout_data
+          render_in_layout { @data }
+        else
+          ERB.new(@data).result
+        end
       end
+    end
+
+    private
+
+    def render_in_layout
+      ERB.new(@layout_data).result(binding)
     end
   end
 end
