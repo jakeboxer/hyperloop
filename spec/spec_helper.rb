@@ -1,4 +1,6 @@
 require 'nokogiri'
+require 'pry'
+
 require 'hyperloop'
 
 module Helpers
