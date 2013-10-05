@@ -1,4 +1,5 @@
 require 'erb'
+require 'tilt'
 
 module Hyperloop
   class View
@@ -31,18 +32,15 @@ module Hyperloop
       when :html
         @data
       when :erb
+        view_html = Tilt['erb'].new { @data }.render
+
         if @layout_data
-          render_in_layout { @data }
+          layout_template = Tilt['erb'].new { @layout_data }
+          layout_template.render { view_html }
         else
-          ERB.new(@data).result
+          view_html
         end
       end
-    end
-
-    private
-
-    def render_in_layout
-      ERB.new(@layout_data).result(binding)
     end
   end
 end
