@@ -7,15 +7,16 @@ module Hyperloop
     def initialize(root=nil)
       @root       = root
       @views_root = File.join([@root, 'app/views'].compact)
+      layout_path = @views_root + '/layouts/application.html.erb'
 
       # Get all the view paths. These look like:
       #
       # some/path/app/views/whatever.html.erb
       # some/path/app/views/subdir/whatever.html.erb
-      paths  = Dir.glob(@views_root + '/**/*').reject {|fn| File.directory?(fn)}
+      view_paths = Dir.glob(@views_root + '/**/*').reject {|fn| File.directory?(fn)}
 
-      @views = paths.inject({}) do |result, path|
-        view = View.new(path)
+      @views = view_paths.inject({}) do |result, path|
+        view = View.new(path, layout_path)
 
         # The path under app/views. This will be something like:
         #
