@@ -1,4 +1,5 @@
 require 'rack'
+require 'sprockets'
 
 module Hyperloop
   class Application
@@ -41,10 +42,14 @@ module Hyperloop
 
     # Rack call interface.
     def call(env)
-      request  = Rack::Request.new(env)
-      response = Response.new
+      request      = Rack::Request.new(env)
+      response     = Response.new
+      request_path = normalized_request_path(request.path)
 
-      if view = @views[normalized_request_path(request.path)]
+      if request_path.start_with?('/assets/')
+        filename = File.basename(request_path)
+        response.write(assets[filename])
+      elsif view = @views[request_path]
         # If there's a view at the path, use its data as the response body.
         data = view.render
         response.write(data)
@@ -57,6 +62,21 @@ module Hyperloop
     end
 
     private
+
+    # Internal: The sprockets environment
+    def assets
+      @assets ||= Sprockets::Environment.new do |env|
+        env.append_path(@root + "/app/assets/images")
+        env.append_path(@root + "/app/assets/javascripts")
+        env.append_path(@root + "/app/assets/stylesheets")
+
+        # compress everything in production
+        if ENV["RACK_ENV"] == "production"
+          env.js_compressor  = YUI::JavaScriptCompressor.new
+          env.css_compressor = YUI::CssCompressor.new
+        end
+      end
+    end
 
     # Internal: Get a normalized version of the specified request path.
     #
