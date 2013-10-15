@@ -47,6 +47,8 @@ module Hyperloop
       request_path = normalized_request_path(request.path)
 
       if request_path.start_with?('/assets/')
+        # If the path is for an asset, find the specified asset and use its data
+        # as the response body.
         filename = File.basename(request_path)
         response.write(assets[filename])
       elsif view = @views[request_path]
@@ -63,7 +65,9 @@ module Hyperloop
 
     private
 
-    # Internal: The sprockets environment
+    # Internal: The sprockets environment for the app.
+    #
+    # Returns a Sprockets::Environment.
     def assets
       @assets ||= Sprockets::Environment.new do |env|
         env.append_path(@root + "/app/assets/images")

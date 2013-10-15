@@ -106,14 +106,14 @@ describe Hyperloop::Application do
       expect(text_in(response.body, 'h1')).to eql('This app has so many assets')
     end
 
-    it 'response successfully to a request for the css app bundle' do
+    it 'responds successfully to a request for the css app bundle' do
       response = @request.get('/assets/app.css')
 
       expect(response).to be_ok
       expect(response.body).to match(/display: block;/)
     end
 
-    it 'response successfully to a request for the javascript app bundle' do
+    it 'responds successfully to a request for the javascript app bundle' do
       response = @request.get('/assets/app.js')
 
       expect(response).to be_ok
