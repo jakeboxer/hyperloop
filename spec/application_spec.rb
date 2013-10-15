@@ -92,4 +92,18 @@ describe Hyperloop::Application do
       expect(text_in(response.body, 'h2')).to eql('This is a page in a subdirectory!')
     end
   end
+
+  describe 'with assets' do
+    before :each do
+      @app     = Hyperloop::Application.new('spec/fixtures/assets/')
+      @request = Rack::MockRequest.new(@app)
+    end
+
+    it 'responds successfully to a request for root' do
+      response = @request.get('/')
+
+      expect(response).to be_ok
+      expect(text_in(response.body, 'h1')).to eql('This app has so many assets')
+    end
+  end
 end
