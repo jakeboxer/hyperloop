@@ -45,8 +45,9 @@ module Hyperloop
       request      = Rack::Request.new(env)
       response     = Response.new
       request_path = normalized_request_path(request.path)
+      filename     = File.basename(request.path)
 
-      if request_path.start_with?('/assets/')
+      if request_path.start_with?('/assets/') && asset_data = assets[filename]
         # If the path is for an asset, find the specified asset and use its data
         # as the response body.
         filename = File.basename(request_path)
