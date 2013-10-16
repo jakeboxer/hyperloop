@@ -149,6 +149,7 @@ describe Hyperloop::Application do
 
     it '404s on a request for a nonexistent asset' do
       response = @request.get('/assets/nonexistent.js')
+
       expect(response).to be_not_found
     end
   end
