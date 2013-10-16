@@ -47,7 +47,7 @@ module Hyperloop
       request_path = normalized_request_path(request.path)
       filename     = File.basename(request.path)
 
-      if request_path.start_with?('/assets/') && asset = assets[filename]
+      if self.class.asset_path?(request_path) && asset = assets[filename]
         # If the path is for an asset, find the specified asset and use its data
         # as the response body.
         response['Content-Type'] = asset.content_type
@@ -65,6 +65,15 @@ module Hyperloop
     end
 
     private
+
+    # Internal: Is the specified path for assets?
+    #
+    # path - Path to check.
+    #
+    # Returns a boolean.
+    def self.asset_path?(path)
+      path.start_with?('/assets/')
+    end
 
     # Internal: The sprockets environment for the app.
     #
