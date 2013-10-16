@@ -47,11 +47,11 @@ module Hyperloop
       request_path = normalized_request_path(request.path)
       filename     = File.basename(request.path)
 
-      if request_path.start_with?('/assets/') && asset_data = assets[filename]
+      if request_path.start_with?('/assets/') && asset = assets[filename]
         # If the path is for an asset, find the specified asset and use its data
         # as the response body.
-        filename = File.basename(request_path)
-        response.write(assets[filename])
+        response['Content-Type'] = asset.content_type
+        response.write(asset.source)
       elsif view = @views[request_path]
         # If there's a view at the path, use its data as the response body.
         data = view.render
