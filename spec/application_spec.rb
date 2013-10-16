@@ -111,6 +111,7 @@ describe Hyperloop::Application do
 
       expect(response).to be_ok
       expect(response.body).to match(/display: block;/)
+      # TODO: Test content type
     end
 
     it 'responds successfully to a request for the javascript app bundle' do
@@ -118,6 +119,7 @@ describe Hyperloop::Application do
 
       expect(response).to be_ok
       expect(response.body).to match(/alert\("such javascript wow"\);/)
+      # TODO: Test content type
     end
 
     %w(gif jpg png).each do |img_format|
@@ -126,6 +128,7 @@ describe Hyperloop::Application do
 
         expect(response).to be_ok
         # TODO: Come up with some test for the image itself
+        # TODO: Test content type
       end
     end
 
