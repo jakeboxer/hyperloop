@@ -120,6 +120,15 @@ describe Hyperloop::Application do
       expect(response.body).to match(/alert\("such javascript wow"\);/)
     end
 
+    %w(gif jpg png).each do |img_format|
+      it "responds successfully to a request for a #{img_format}" do
+        response = @request.get("/assets/my-#{img_format}.#{img_format}")
+
+        expect(response).to be_ok
+        # TODO: Come up with some test for the image itself
+      end
+    end
+
     it '404s on a request for a nonexistent asset' do
       response = @request.get('/assets/nonexistent.js')
       expect(response).to be_not_found
