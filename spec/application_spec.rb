@@ -122,14 +122,28 @@ describe Hyperloop::Application do
       # TODO: Test content type
     end
 
-    %w(gif jpg png).each do |img_format|
-      it "responds successfully to a request for a #{img_format}" do
-        response = @request.get("/assets/my-#{img_format}.#{img_format}")
+    it "responds successfully to a request for a gif" do
+      response = @request.get("/assets/my-gif.gif")
 
-        expect(response).to be_ok
-        # TODO: Come up with some test for the image itself
-        # TODO: Test content type
-      end
+      expect(response).to be_ok
+      expect(Digest::SHA1.hexdigest(response.body)).to eql('bcbc6e6fc1eb77b2ca676e17425df93a56495bb2')
+      # TODO: Test content type
+    end
+
+    it "responds successfully to a request for a jpg" do
+      response = @request.get("/assets/my-jpg.jpg")
+
+      expect(response).to be_ok
+      expect(Digest::SHA1.hexdigest(response.body)).to eql('ae6a26b513d6648446da1395ee73e9cf32c8c668')
+      # TODO: Test content type
+    end
+
+    it "responds successfully to a request for a png" do
+      response = @request.get("/assets/my-png.png")
+
+      expect(response).to be_ok
+      expect(Digest::SHA1.hexdigest(response.body)).to eql('adf65c25a8e3e39c49ecf581433278d7eac4d1a2')
+      # TODO: Test content type
     end
 
     it '404s on a request for a nonexistent asset' do
