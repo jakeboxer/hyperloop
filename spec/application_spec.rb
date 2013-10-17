@@ -11,6 +11,7 @@ describe Hyperloop::Application do
       response = @request.get('/')
 
       expect(response).to be_ok
+      expect(response.content_type).to eql('text/html')
       expect(text_in(response.body, 'h1')).to eql('Simple')
     end
 
@@ -90,6 +91,66 @@ describe Hyperloop::Application do
       expect(response).to be_ok
       expect(text_in(response.body, 'h1')).to eql('Layout Header')
       expect(text_in(response.body, 'h2')).to eql('This is a page in a subdirectory!')
+    end
+  end
+
+  describe 'with assets' do
+    before :each do
+      @app     = Hyperloop::Application.new('spec/fixtures/assets/')
+      @request = Rack::MockRequest.new(@app)
+    end
+
+    it 'responds successfully to a request for root' do
+      response = @request.get('/')
+
+      expect(response).to be_ok
+      expect(text_in(response.body, 'h1')).to eql('This app has so many assets')
+    end
+
+    it 'responds successfully to a request for the css app bundle' do
+      response = @request.get('/assets/app.css')
+
+      expect(response).to be_ok
+      expect(response.content_type).to eql('text/css')
+      expect(response.body).to match(/display: block;/)
+    end
+
+    it 'responds successfully to a request for the javascript app bundle' do
+      response = @request.get('/assets/app.js')
+
+      expect(response).to be_ok
+      expect(response.content_type).to eql('application/javascript')
+      expect(response.body).to match(/alert\("such javascript wow"\);/)
+    end
+
+    it "responds successfully to a request for a gif" do
+      response = @request.get("/assets/my-gif.gif")
+
+      expect(response).to be_ok
+      expect(response.content_type).to eql('image/gif')
+      expect(Digest::SHA1.hexdigest(response.body)).to eql('bcbc6e6fc1eb77b2ca676e17425df93a56495bb2')
+    end
+
+    it "responds successfully to a request for a jpg" do
+      response = @request.get("/assets/my-jpg.jpg")
+
+      expect(response).to be_ok
+      expect(response.content_type).to eql('image/jpeg')
+      expect(Digest::SHA1.hexdigest(response.body)).to eql('ae6a26b513d6648446da1395ee73e9cf32c8c668')
+    end
+
+    it "responds successfully to a request for a png" do
+      response = @request.get("/assets/my-png.png")
+
+      expect(response).to be_ok
+      expect(response.content_type).to eql('image/png')
+      expect(Digest::SHA1.hexdigest(response.body)).to eql('adf65c25a8e3e39c49ecf581433278d7eac4d1a2')
+    end
+
+    it '404s on a request for a nonexistent asset' do
+      response = @request.get('/assets/nonexistent.js')
+
+      expect(response).to be_not_found
     end
   end
 end
