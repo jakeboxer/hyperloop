@@ -1,7 +1,7 @@
 # coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
+lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'hyperloop/version'
+require "hyperloop/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "hyperloop"
@@ -18,12 +18,12 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_dependency 'coffee-script', '~> 2.2.0'
-  spec.add_dependency 'rack', '~> 1.5'
-  spec.add_dependency 'sass', '~> 3.2.12'
-  spec.add_dependency 'sprockets', '~> 2.10.0'
-  spec.add_dependency 'tilt', '~> 1.4.1'
-  spec.add_dependency 'yui-compressor', '~> 0.12.0'
+  spec.add_dependency "coffee-script", "~> 2.2.0"
+  spec.add_dependency "rack", "~> 1.5"
+  spec.add_dependency "sass", "~> 3.2.12"
+  spec.add_dependency "sprockets", "~> 2.10.0"
+  spec.add_dependency "tilt", "~> 1.4.1"
+  spec.add_dependency "yui-compressor", "~> 0.12.0"
 
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "nokogiri", "~> 1.6.0"

@@ -1,7 +1,7 @@
-require 'nokogiri'
-require 'pry'
+require "nokogiri"
+require "pry"
 
-require 'hyperloop'
+require "hyperloop"
 
 module Helpers
   def html(str)
