@@ -22,7 +22,7 @@ describe Hyperloop::View::Registry do
     end
 
     it "doesn't find layouts" do
-      expect(@registry.find_template_view("/subdir/layouts/application")).to be_nil
+      expect(@registry.find_template_view("/layouts/application")).to be_nil
     end
   end
 

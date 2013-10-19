@@ -12,6 +12,7 @@ module Hyperloop
         # some/path/app/views/subdir/whatever.html.erb
         # some/path/app/views/subdir/_partial.html.erb
         view_paths = Dir.glob(@views_root + "/**/*").reject {|fn| File.directory?(fn)}
+        view_paths -= [layout_path]
 
         @template_views = {}
         @partial_views  = {}
