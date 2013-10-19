@@ -1,3 +1,5 @@
+require 'tilt'
+
 module Hyperloop
   class View
     class Scope
@@ -13,7 +15,10 @@ module Hyperloop
       #
       # Returns a string.
       def render(path)
-        path
+        # lol
+        view_path = File.join("spec/fixtures/partials/app/views", File.dirname(path), "_" + File.basename(path)) + ".html.erb"
+        data = File.read(view_path)
+        Tilt["erb"].new { data }.render(self)
       end
     end
   end
