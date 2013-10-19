@@ -1,5 +1,5 @@
-require 'rack'
-require 'sprockets'
+require "rack"
+require "sprockets"
 
 module Hyperloop
   class Application
@@ -7,14 +7,14 @@ module Hyperloop
 
     def initialize(root=nil)
       @root       = root
-      @views_root = File.join([@root, 'app/views'].compact)
-      layout_path = @views_root + '/layouts/application.html.erb'
+      @views_root = File.join([@root, "app/views"].compact)
+      layout_path = @views_root + "/layouts/application.html.erb"
 
       # Get all the view paths. These look like:
       #
       # some/path/app/views/whatever.html.erb
       # some/path/app/views/subdir/whatever.html.erb
-      view_paths = Dir.glob(@views_root + '/**/*').reject {|fn| File.directory?(fn)}
+      view_paths = Dir.glob(@views_root + "/**/*").reject {|fn| File.directory?(fn)}
 
       @views = view_paths.inject({}) do |result, path|
         view = View.new(path, layout_path)
@@ -23,7 +23,7 @@ module Hyperloop
         #
         # /whatever.html.erb
         # /subdir/whatever.html.erb
-        relative_path = path.sub(@views_root, '')
+        relative_path = path.sub(@views_root, "")
 
         # The path under app/views without a file extension. This will be
         # something like:
@@ -34,7 +34,7 @@ module Hyperloop
         request_path = File.join(request_dir, view.name)
 
         result[request_path] = view
-        result[request_dir]  = view if view.name == 'index'
+        result[request_dir]  = view if view.name == "index"
 
         result
       end
@@ -50,7 +50,7 @@ module Hyperloop
       if self.class.asset_path?(request_path) && asset = assets[filename]
         # If the path is for an asset, find the specified asset and use its data
         # as the response body.
-        response['Content-Type'] = asset.content_type
+        response["Content-Type"] = asset.content_type
         response.write(asset.source)
       elsif view = @views[request_path]
         # If there's a view at the path, use its data as the response body.
@@ -72,7 +72,7 @@ module Hyperloop
     #
     # Returns a boolean.
     def self.asset_path?(path)
-      path.start_with?('/assets/')
+      path.start_with?("/assets/")
     end
 
     # Internal: The sprockets environment for the app.
@@ -98,10 +98,10 @@ module Hyperloop
     #
     # Returns a string.
     def normalized_request_path(path)
-      if path == '/'
+      if path == "/"
         path
       else
-        path.chomp('/')
+        path.chomp("/")
       end
     end
   end

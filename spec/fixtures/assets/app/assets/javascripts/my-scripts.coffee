@@ -1,1 +1,1 @@
-alert("such javascript wow");
+alert "such javascript wow"

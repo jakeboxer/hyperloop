@@ -1,5 +1,5 @@
-require 'erb'
-require 'tilt'
+require "erb"
+require "tilt"
 
 module Hyperloop
   class View
@@ -21,7 +21,7 @@ module Hyperloop
     #
     # Returns a string.
     def name
-      @name ||= File.basename(@full_path).split('.').first
+      @name ||= File.basename(@full_path).split(".").first
     end
 
     # Public: Render the view.
@@ -32,10 +32,10 @@ module Hyperloop
       when :html
         @data
       when :erb
-        view_html = Tilt['erb'].new { @data }.render
+        view_html = Tilt["erb"].new { @data }.render
 
         if @layout_data
-          layout_template = Tilt['erb'].new { @layout_data }
+          layout_template = Tilt["erb"].new { @layout_data }
           layout_template.render { view_html }
         else
           view_html
