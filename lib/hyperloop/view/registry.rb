@@ -33,7 +33,7 @@ module Hyperloop
           # /whatever
           # /subdir/whatever
           # /subdir/partial
-          request_dir  = File.split(relative_path).first
+          request_dir  = File.dirname(relative_path)
           request_path = File.join(request_dir, view.name)
 
           if view.partial?
