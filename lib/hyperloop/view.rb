@@ -17,11 +17,19 @@ module Hyperloop
     end
 
     # Public: The name of the view. Derived from the view's filename without
-    # any extensions. Not guaranteed to be unique amongst other views in an app.
+    # any extensions or leading underscores. Not guaranteed to be unique amongst
+    # other views in an app.
     #
     # Returns a string.
     def name
-      @name ||= File.basename(@full_path).split(".").first
+      @name ||= filename.split(".").first.sub(/^_/, '')
+    end
+
+    # Public: Is this view a partial?
+    #
+    # Returns a boolean.
+    def partial?
+      @partial ||= filename.start_with?('_')
     end
 
     # Public: Render the view.
@@ -45,6 +53,12 @@ module Hyperloop
           view_html
         end
       end
+    end
+
+    private
+
+    def filename
+      filename ||= File.basename(@full_path)
     end
   end
 end

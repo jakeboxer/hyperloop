@@ -8,9 +8,14 @@ describe Hyperloop::View do
       "spec/fixtures/layouts/app/views/index.html.erb",
       "spec/fixtures/layouts/app/views/layouts/application.html.erb"
     )
-    @partial_view = Hyperloop::View.new(
+
+    @partial_container = Hyperloop::View.new(
       "spec/fixtures/partials/app/views/index.html.erb",
       "spec/fixtures/partials/app/views/layouts/application.html.erb"
+    )
+    @partial_view = Hyperloop::View.new(
+      "spec/fixtures/partials/app/views/subdir/_partial.html.erb",
+      nil
     )
   end
 
@@ -31,6 +36,20 @@ describe Hyperloop::View do
 
     it "strips the extension from ERB files" do
       expect(@erb_view.name).to eql("about")
+    end
+
+    it "strips the leading underscore for partials" do
+      expect(@partial_view.name).to eql("partial")
+    end
+  end
+
+  describe "#partial?" do
+    it "is false for a template view" do
+      expect(@partial_container).not_to be_partial
+    end
+
+    it "is true for a partial view" do
+      expect(@partial_view).to be_partial
     end
   end
 
@@ -55,7 +74,7 @@ describe Hyperloop::View do
     end
 
     it "renders partials in ERB files" do
-      html = @partial_view.render(mock_request)
+      html = @partial_container.render(mock_request)
 
       expect(text_in(html, "h1")).to eql("Partials work in this app")
       expect(text_in(html, "h2")).to eql("This part of the root page is not in a partial!")
