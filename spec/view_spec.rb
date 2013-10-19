@@ -8,6 +8,10 @@ describe Hyperloop::View do
       "spec/fixtures/layouts/app/views/index.html.erb",
       "spec/fixtures/layouts/app/views/layouts/application.html.erb"
     )
+    @partial_view = Hyperloop::View.new(
+      "spec/fixtures/partials/app/views/index.html.erb",
+      "spec/fixtures/partials/app/views/layouts/application.html.erb"
+    )
   end
 
   describe "#format" do
@@ -44,6 +48,14 @@ describe Hyperloop::View do
 
       expect(text_in(html, "h1")).to eql("Layout Header")
       expect(text_in(html, "h2")).to eql("This is the root page!")
+    end
+
+    it "renders partials in ERB files" do
+      html = @partial_view.render
+
+      expect(text_in(html, "h1")).to eql("Partials work in this app")
+      expect(text_in(html, "h2")).to eql("This part of the root page is not in a partial!")
+      expect(text_in(html, "p")).to eql("This is coming from a partial.")
     end
   end
 end
