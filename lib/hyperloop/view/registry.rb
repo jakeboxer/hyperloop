@@ -60,6 +60,25 @@ module Hyperloop
       def find_template_view(path)
         @template_views[path]
       end
+
+      # Public: Get the partial view for the specified path.
+      #
+      # path - Relative path for the view. Should start under the app/views
+      # directory and not include file extensions or leading underscores.
+      #
+      # Example:
+      #
+      #   Assuming there's a file at path/to/yoursite/app/views/subdir/_partial.html.erb
+      #
+      #   bad:  registry.find_partial_view("app/views/subdir/_partial.html.erb")
+      #   bad:  registry.find_partial_view("subdir/_partial.html.erb")
+      #   bad:  registry.find_partial_view("subdir/_partial")
+      #   good: registry.find_partial_view("subdir/partial")
+      #
+      # Returns a Hyperloop::View or nil if no view was found.
+      def find_partial_view(path)
+        @partial_views[path]
+      end
     end
   end
 end
