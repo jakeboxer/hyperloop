@@ -36,22 +36,26 @@ describe Hyperloop::View do
 
   describe "#render" do
     it "renders plain HTML files" do
-      expect(text_in(@html_view.render, "h1")).to eql("About")
+      html = @html_view.render(mock_request)
+
+      expect(text_in(html, "h1")).to eql("About")
     end
 
     it "renders ERB files" do
-      expect(text_in(@erb_view.render, "h1")).to eql("I was born on December 21")
+      html = @erb_view.render(mock_request)
+
+      expect(text_in(html, "h1")).to eql("I was born on December 21")
     end
 
     it "renders ERB files in layouts" do
-      html = @layout_view.render
+      html = @layout_view.render(mock_request)
 
       expect(text_in(html, "h1")).to eql("Layout Header")
       expect(text_in(html, "h2")).to eql("This is the root page!")
     end
 
     it "renders partials in ERB files" do
-      html = @partial_view.render
+      html = @partial_view.render(mock_request)
 
       expect(text_in(html, "h1")).to eql("Partials work in this app")
       expect(text_in(html, "h2")).to eql("This part of the root page is not in a partial!")

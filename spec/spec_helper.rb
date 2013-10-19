@@ -13,6 +13,14 @@ module Helpers
     raise "Selector #{selector.inspect} not found in:\n\n#{html_str.inspect}" unless node
     node.text
   end
+
+  def mock_app
+    @mock_app ||= double("rack app", :call => Hyperloop::Response.new.finish )
+  end
+
+  def mock_request
+    Rack::MockRequest.new(mock_app)
+  end
 end
 
 RSpec.configure do |c|

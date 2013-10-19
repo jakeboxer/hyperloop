@@ -26,17 +26,21 @@ module Hyperloop
 
     # Public: Render the view.
     #
+    # request - Rack request object that the view is being rendered in response
+    #           to.
+    #
     # Returns a string.
-    def render
+    def render(request)
       case format
       when :html
         @data
       when :erb
-        view_html = Tilt["erb"].new { @data }.render
+        scope     = Scope.new(request)
+        view_html = Tilt["erb"].new { @data }.render(scope)
 
         if @layout_data
           layout_template = Tilt["erb"].new { @layout_data }
-          layout_template.render { view_html }
+          layout_template.render(scope) { view_html }
         else
           view_html
         end

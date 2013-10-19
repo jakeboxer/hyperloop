@@ -1,7 +1,6 @@
 describe Hyperloop::View::Scope do
   before :each do
-    app      = Hyperloop::Application.new("spec/fixtures/simple/")
-    @request = Rack::MockRequest.new(app)
+    @request = Rack::MockRequest.new(mock_app)
     @scope   = Hyperloop::View::Scope.new(@request)
   end
 

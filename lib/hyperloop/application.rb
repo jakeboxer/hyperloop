@@ -54,7 +54,7 @@ module Hyperloop
         response.write(asset.source)
       elsif view = @views[request_path]
         # If there's a view at the path, use its data as the response body.
-        data = view.render
+        data = view.render(request)
         response.write(data)
       else
         # If there's no view at the path, 404.
