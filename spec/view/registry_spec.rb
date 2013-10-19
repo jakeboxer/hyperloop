@@ -1,6 +1,6 @@
 describe Hyperloop::View::Registry do
   before :each do
-    @registry = Hyperloop.registry.new("spec/fixtures/partials/")
+    @registry = Hyperloop::View::Registry.new("spec/fixtures/partials/")
   end
 
   describe "#find_template_view" do
