@@ -45,6 +45,18 @@ module Hyperloop
         end
       end
 
+      # Public: Get the template view for the specified path.
+      #
+      # path - Relative path for the view. Should start under the app/views
+      # directory and not include file extensions.
+      #
+      # Example:
+      #
+      #   bad:  registry.find_template_view("app/views/subdir/whatever.html.erb")
+      #   bad:  registry.find_template_view("subdir/whatever.html.erb")
+      #   good: registry.find_template_view("subdir/whatever")
+      #
+      # Returns a Hyperloop::View or nil if no view was found.
       def find_template_view(path)
         @template_views[path]
       end
