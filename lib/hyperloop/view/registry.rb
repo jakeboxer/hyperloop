@@ -52,6 +52,8 @@ module Hyperloop
       #
       # Example:
       #
+      #   Assuming there's a file at path/to/yoursite/app/views/subdir/whatever.html.erb
+      #
       #   bad:  registry.find_template_view("app/views/subdir/whatever.html.erb")
       #   bad:  registry.find_template_view("subdir/whatever.html.erb")
       #   good: registry.find_template_view("subdir/whatever")
