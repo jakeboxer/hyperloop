@@ -3,10 +3,11 @@ require "tilt"
 
 module Hyperloop
   class View
-    def initialize(full_path, layout_path=nil)
-      @full_path   = full_path
-      @data        = File.read(@full_path)
-      @layout_data = File.read(layout_path) if layout_path && File.file?(layout_path)
+    def initialize(view_registry, full_path, layout_path=nil)
+      @view_registry = view_registry
+      @full_path     = full_path
+      @data          = File.read(@full_path)
+      @layout_data   = File.read(layout_path) if layout_path && File.file?(layout_path)
     end
 
     # Public: The format of the view. Derived from the view's extension.
@@ -43,7 +44,7 @@ module Hyperloop
       when :html
         @data
       when :erb
-        scope     = Scope.new(request)
+        scope     = Scope.new(request, @view_registry)
         view_html = Tilt["erb"].new { @data }.render(scope)
 
         if @layout_data

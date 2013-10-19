@@ -18,7 +18,7 @@ module Hyperloop
         @partial_views  = {}
 
         view_paths.each do |path|
-          view = View.new(path, layout_path)
+          view = View.new(self, path, layout_path)
 
           # The path under app/views. This will be something like:
           #
@@ -37,7 +37,8 @@ module Hyperloop
           request_path = File.join(request_dir, view.name)
 
           if view.partial?
-            @partial_views[request_path] = view
+            # Chop off the leading forward slash for partials.
+            @partial_views[request_path.sub(/^\//, "")] = view
           else
             @template_views[request_path] = view
             @template_views[request_dir]  = view if view.name == "index"
@@ -48,15 +49,17 @@ module Hyperloop
       # Public: Get the template view for the specified path.
       #
       # path - Relative path for the view. Should start under the app/views
-      # directory and not include file extensions.
+      # directory and not include file extensions. Should start with a forward
+      # slash.
       #
       # Example:
       #
       #   Assuming there's a file at path/to/yoursite/app/views/subdir/whatever.html.erb
       #
-      #   bad:  registry.find_template_view("app/views/subdir/whatever.html.erb")
-      #   bad:  registry.find_template_view("subdir/whatever.html.erb")
-      #   good: registry.find_template_view("subdir/whatever")
+      #   bad:  registry.find_template_view("/app/views/subdir/whatever.html.erb")
+      #   bad:  registry.find_template_view("/subdir/whatever.html.erb")
+      #   bad:  registry.find_template_view("subdir/whatever")
+      #   good: registry.find_template_view("/subdir/whatever")
       #
       # Returns a Hyperloop::View or nil if no view was found.
       def find_template_view(path)
@@ -66,7 +69,8 @@ module Hyperloop
       # Public: Get the partial view for the specified path.
       #
       # path - Relative path for the view. Should start under the app/views
-      # directory and not include file extensions or leading underscores.
+      # directory and not include file extensions, leading underscores, or
+      # leading forward slashes.
       #
       # Example:
       #
@@ -75,6 +79,7 @@ module Hyperloop
       #   bad:  registry.find_partial_view("app/views/subdir/_partial.html.erb")
       #   bad:  registry.find_partial_view("subdir/_partial.html.erb")
       #   bad:  registry.find_partial_view("subdir/_partial")
+      #   bad:  registry.find_partial_view("/subdir/partial")
       #   good: registry.find_partial_view("subdir/partial")
       #
       # Returns a Hyperloop::View or nil if no view was found.

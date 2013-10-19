@@ -8,6 +8,13 @@ module Helpers
     Nokogiri::HTML(str)
   end
 
+  def mock_view_registry
+    @mock_view_registry ||= double("Hyperloop::View::Registry",
+      :find_partial_view  => nil,
+      :find_template_view => nil
+    )
+  end
+
   def text_in(html_str, selector)
     node = html(html_str).at_css(selector)
     raise "Selector #{selector.inspect} not found in:\n\n#{html_str.inspect}" unless node

@@ -5,8 +5,9 @@ module Hyperloop
     class Scope
       attr_reader :request
 
-      def initialize(request)
-        @request = request
+      def initialize(request, view_registry)
+        @request       = request
+        @view_registry = view_registry
       end
 
       # Public: Render the specified partial.
@@ -15,10 +16,7 @@ module Hyperloop
       #
       # Returns a string.
       def render(path)
-        # lol
-        view_path = File.join("spec/fixtures/partials/app/views", File.dirname(path), "_" + File.basename(path)) + ".html.erb"
-        data = File.read(view_path)
-        Tilt["erb"].new { data }.render(self)
+        @view_registry.find_partial_view(path).render(request)
       end
     end
   end

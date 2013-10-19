@@ -2,21 +2,22 @@ require File.expand_path("../spec_helper", __FILE__)
 
 describe Hyperloop::View do
   before :each do
-    @html_view   = Hyperloop::View.new("spec/fixtures/simple/app/views/about.html")
-    @erb_view    = Hyperloop::View.new("spec/fixtures/erb/app/views/about.html.erb")
-    @layout_view = Hyperloop::View.new(
+    @html_view = Hyperloop::View.new(mock_view_registry,
+      "spec/fixtures/simple/app/views/about.html"
+    )
+
+    @erb_view = Hyperloop::View.new(mock_view_registry,
+      "spec/fixtures/erb/app/views/about.html.erb"
+    )
+
+    @layout_view = Hyperloop::View.new(mock_view_registry,
       "spec/fixtures/layouts/app/views/index.html.erb",
       "spec/fixtures/layouts/app/views/layouts/application.html.erb"
     )
 
-    @partial_container = Hyperloop::View.new(
-      "spec/fixtures/partials/app/views/index.html.erb",
-      "spec/fixtures/partials/app/views/layouts/application.html.erb"
-    )
-    @partial_view = Hyperloop::View.new(
-      "spec/fixtures/partials/app/views/subdir/_partial.html.erb",
-      nil
-    )
+    partials_view_registry = Hyperloop::View::Registry.new("spec/fixtures/partials/")
+    @partial_container     = partials_view_registry.find_template_view("/")
+    @partial_view          = partials_view_registry.find_partial_view("subdir/partial")
   end
 
   describe "#format" do
@@ -73,7 +74,7 @@ describe Hyperloop::View do
       expect(text_in(html, "h2")).to eql("This is the root page!")
     end
 
-    it "renders partials in ERB files" do
+    it "renders ERB files containing partials" do
       html = @partial_container.render(mock_request)
 
       expect(text_in(html, "h1")).to eql("Partials work in this app")
