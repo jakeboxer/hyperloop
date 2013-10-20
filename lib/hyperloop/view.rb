@@ -7,7 +7,15 @@ module Hyperloop
       @view_registry = view_registry
       @full_path     = full_path
       @data          = File.read(@full_path)
-      @layout_data   = File.read(layout_path) if layout_path && File.file?(layout_path)
+
+      # Only load layout data if all of these things are true:
+      #
+      # 1. We're not in a partial
+      # 2. A layout path was provided
+      # 3. There's a file at the provided layout path
+      if !partial? && layout_path && File.file?(layout_path)
+        @layout_data = File.read(layout_path)
+      end
     end
 
     # Public: The format of the view. Derived from the view's extension.

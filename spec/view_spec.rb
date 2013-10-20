@@ -81,5 +81,13 @@ describe Hyperloop::View do
       expect(text_in(html, "h2")).to eql("This part of the root page is not in a partial!")
       expect(text_in(html, "p")).to eql("This is coming from a partial.")
     end
+
+    it "renders ERB partials" do
+      html = @partial_view.render(mock_request)
+
+      expect(text_in(html, "h1")).not_to eql("Partials work in this app")
+      expect(text_in(html, "h2")).not_to eql("This part of the root page is not in a partial!")
+      expect(text_in(html, "p")).to eql("This is coming from a partial.")
+    end
   end
 end
