@@ -31,14 +31,14 @@ module Hyperloop
     #
     # Returns a string.
     def name
-      @name ||= filename.split(".").first.sub(/^_/, '')
+      @name ||= filename.split(".").first.sub(/^_/, "")
     end
 
     # Public: Is this view a partial?
     #
     # Returns a boolean.
     def partial?
-      @partial ||= filename.start_with?('_')
+      @partial ||= filename.start_with?("_")
     end
 
     # Public: Render the view.
