@@ -6,5 +6,4 @@ require "hyperloop/view/registry"
 require "hyperloop/view/scope"
 
 module Hyperloop
-  # Your code goes here...
 end
