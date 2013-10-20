@@ -67,7 +67,7 @@ module Hyperloop
     private
 
     def filename
-      filename ||= File.basename(@full_path)
+      @filename ||= File.basename(@full_path)
     end
   end
 end
