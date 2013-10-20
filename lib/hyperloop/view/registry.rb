@@ -2,16 +2,15 @@ module Hyperloop
   class View
     class Registry
       def initialize(root)
-        @root       = root
-        @views_root = File.join([@root, "app/views"].compact)
-        layout_path = @views_root + "/layouts/application.html.erb"
+        views_root  = File.join([root, "app/views"].compact)
+        layout_path = views_root + "/layouts/application.html.erb"
 
         # Get all the view paths. These look like:
         #
         # some/path/app/views/whatever.html.erb
         # some/path/app/views/subdir/whatever.html.erb
         # some/path/app/views/subdir/_partial.html.erb
-        view_paths = Dir.glob(@views_root + "/**/*").reject {|fn| File.directory?(fn)}
+        view_paths = Dir.glob(views_root + "/**/*").reject {|fn| File.directory?(fn)}
         view_paths -= [layout_path]
 
         @template_views = {}
@@ -25,7 +24,7 @@ module Hyperloop
           # /whatever.html.erb
           # /subdir/whatever.html.erb
           # /subdir/_partial.html.erb
-          relative_path = path.sub(@views_root, "")
+          relative_path = path.sub(views_root, "")
 
           # The path under app/views without a file extension (and without the
           # starting _ for partials). This will be something like:
