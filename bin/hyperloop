@@ -1,0 +1,3 @@
+#!/usr/bin/env ruby
+require "hyperloop/cli"
+Hyperloop::CLI.start
