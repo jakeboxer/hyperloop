@@ -57,7 +57,7 @@ module Hyperloop
 
         # compress everything in production
         if ENV["RACK_ENV"] == "production"
-          env.js_compressor  = YUI::JavaScriptCompressor.new
+          env.js_compressor  = YUI::JavaScriptCompressor.new(:munge => true)
           env.css_compressor = YUI::CssCompressor.new
         end
       end
