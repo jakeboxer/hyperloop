@@ -15,6 +15,9 @@ module Hyperloop
       def create_directories
         empty_directory(name)
         empty_directory(File.join(name, "app"))
+        empty_directory(File.join(name, "app", "assets"))
+        empty_directory(File.join(name, "app", "assets", "javascripts"))
+        empty_directory(File.join(name, "app", "assets", "stylesheets"))
         empty_directory(File.join(name, "app", "views"))
         empty_directory(File.join(name, "app", "views", "layouts"))
       end
@@ -22,6 +25,9 @@ module Hyperloop
       def copy_files
         template("config.ru",            File.join(name, "config.ru"))
         template("Gemfile",              File.join(name, "Gemfile"))
+        template("app.js",               File.join(name, "app", "assets", "javascripts", "app.js"))
+        template("current-time.coffee",  File.join(name, "app", "assets", "javascripts", "current-time.coffee"))
+        template("jquery.js",            File.join(name, "app", "assets", "javascripts", "jquery.js"))
         template("application.html.erb", File.join(name, "app", "views", "layouts", "application.html.erb"))
         template("index.html.erb",       File.join(name, "app", "views", "index.html.erb"))
         template("about.html.erb",       File.join(name, "app", "views", "about.html.erb"))
