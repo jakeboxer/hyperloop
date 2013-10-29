@@ -26,7 +26,7 @@ module Hyperloop
       def copy_files
         template("config.ru",            File.join(name, "config.ru"))
         template("Gemfile",              File.join(name, "Gemfile"))
-        template("socool.jpg",           File.join(name, "app", "assets", "images", "socool.jpg"))
+        copy_file("socool.jpg",          File.join(name, "app", "assets", "images", "socool.jpg"))
         template("app.js",               File.join(name, "app", "assets", "javascripts", "app.js"))
         template("current-time.coffee",  File.join(name, "app", "assets", "javascripts", "current-time.coffee"))
         template("jquery.js",            File.join(name, "app", "assets", "javascripts", "jquery.js"))
