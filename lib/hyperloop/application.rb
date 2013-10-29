@@ -1,5 +1,6 @@
 require "rack"
 require "sprockets"
+require "yui/compressor"
 
 module Hyperloop
   class Application
