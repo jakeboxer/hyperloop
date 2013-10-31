@@ -55,7 +55,18 @@ app/assets/javascripts/scriptz1.js
 app/assets/javascripts/scriptz2.coffee
 ```
 
-They'll be included in all your views (so long as you load `/assets/app.css` and `/assets/app.js` in your layout).
+They'll be included in all your views, so long as you have these two tags:
+
+``` html
+<!-- I suggest putting this in between <head> and </head> -->
+<link href="/assets/app.css" media="all" rel="stylesheet" type="text/css">
+
+<!-- Minds more intelligent than mine suggest putting this at the end of the document body -->
+<!-- As in, right before </body> -->
+<script src="/assets/app.js" type="text/javascript"></script>
+```
+
+somewhere in your layout.
 
 If you create `app/assets/images/photo.jpg`, you'll be able to show it in a view with `<img src="/assets/photo.jpg">`.
 
