@@ -39,12 +39,30 @@ any of the other boilerplate directories/files that would clutter up a static si
 
 ## Structure
 
+### Layout
+
 Your layout is in `app/views/layouts/application.html.erb`.
+
+### Views
 
 Your site root is in `app/views/index.html.erb`.
 
 If you create `app/views/hello.html.erb`, you'll be able to get to it by going to
 [http://localhost:3000/hello](http://localhost:3000/hello).
+
+### Partials
+
+If you create `app/views/_some_section.html.erb`, you'll be able to load it as a partial almost like you would in Rails:
+
+``` ruby
+<%= render "some_section" %>
+```
+
+Note: In Rails, it's `<%= render :partial => "some_section" %>`, since there are other things you could want to render
+besides a partial. In Hyperloop, there aren't, so the options hash isn't necessary. If enough people complain, I might
+make it accept the hash version too.
+
+### CSS, SCSS, Sass, JavaScript, and CoffeeScript
 
 If you create some files like:
 
@@ -67,6 +85,8 @@ They'll be included in all your views, so long as you have these two tags:
 ```
 
 somewhere in your layout.
+
+### Images
 
 If you create `app/assets/images/photo.jpg`, you'll be able to show it in a view with `<img src="/assets/photo.jpg">`.
 
