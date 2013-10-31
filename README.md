@@ -35,7 +35,7 @@ any of the other boilerplate directories/files that would clutter up a static si
         cd mysite
         thin start
 
-4. Go to [http://localhost:3000/](http://localhost:3000/]) and you'll see your brand new website!
+4. Go to [http://localhost:3000/](http://localhost:3000/) and you'll see your brand new website!
 
 ## Structure
 
