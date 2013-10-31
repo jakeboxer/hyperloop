@@ -22,6 +22,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "rack", "~> 1.5"
   spec.add_dependency "sass", "~> 3.2.12"
   spec.add_dependency "sprockets", "~> 2.10.0"
+  spec.add_dependency "thor", "~> 0.18.1"
   spec.add_dependency "tilt", "~> 1.4.1"
   spec.add_dependency "yui-compressor", "~> 0.12.0"
 

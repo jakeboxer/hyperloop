@@ -112,7 +112,7 @@ describe Hyperloop::Application do
 
       expect(response).to be_ok
       expect(response.content_type).to eql("text/css")
-      expect(response.body).to match(/display: block;/)
+      expect(response.body).to match(/display: ?block/)
     end
 
     it "responds successfully to a request for the javascript app bundle" do
@@ -120,7 +120,7 @@ describe Hyperloop::Application do
 
       expect(response).to be_ok
       expect(response.content_type).to eql("application/javascript")
-      expect(response.body).to match(/alert\("such javascript wow"\);/)
+      expect(response.body).to match(/alert\("such javascript wow"\)/)
     end
 
     it "responds successfully to a request for a gif" do
