@@ -14,8 +14,8 @@ and all that other good shit. You can use layouts and partials and deploy to Her
 
 Basically, you can do all the stuff you're used to with Rails. On top of that, you don't have to type any of the magic
 incantations that just aren't necessary in a static site. You don't have to set up routes. You don't have to make
-a controller method for every view. You don't have to think about environments or tests or schemas or any of the
-other boilerplate directories/files that would clutter up a static site being shoehorned into a Rails app.
+controllers with a method for every view. You don't have to think about environments or tests or schemas or helpers or
+any of the other boilerplate directories/files that would clutter up a static site being shoehorned into a Rails app.
 
 ## Getting Started
 
@@ -35,7 +35,7 @@ other boilerplate directories/files that would clutter up a static site being sh
         cd mysite
         thin start
 
-4. Go to http://localhost:3000 and you'll see your brand new website!
+4. Go to [http://localhost:3000/](http://localhost:3000/]) and you'll see your brand new website!
 
 ## Structure
 
@@ -44,7 +44,7 @@ Your layout is in `app/views/layouts/application.html.erb`.
 Your site root is in `app/views/index.html.erb`.
 
 If you create `app/views/hello.html.erb`, you'll be able to get to it by going to
-`[http://localhost:3000/hello](http://localhost:3000/hello)`.
+[http://localhost:3000/hello](http://localhost:3000/hello).
 
 If you create some files like:
 
@@ -55,9 +55,9 @@ app/assets/javascripts/scriptz1.js
 app/assets/javascripts/scriptz2.coffee
 ```
 
-They'll be included in all your views (so long as you load `assets/app.css` and `assets/app.js`).
+They'll be included in all your views (so long as you load `/assets/app.css` and `/assets/app.js` in your layout).
 
-If you create `app/assets/images/photo.jpg`, you'll be able to show it in a view with `<img src="assets/photo.jpg">`.
+If you create `app/assets/images/photo.jpg`, you'll be able to show it in a view with `<img src="/assets/photo.jpg">`.
 
 ## Contributing
 
