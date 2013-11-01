@@ -10,7 +10,7 @@ I came up with the idea for Hyperloop after hearing one too many experienced web
 to set up a regular website anymore."
 
 With Hyperloop, you can create a new site just like you would with Rails. You can write ERB and Sass and CoffeeScript
-and all that other good shit. You can use layouts and partials and deploy to Heroku.
+and all that other good stuff. You can use layouts and partials and deploy to Heroku.
 
 Basically, you can do all the stuff you're used to with Rails. On top of that, you don't have to type any of the magic
 incantations that just aren't necessary in a static site. You don't have to set up routes. You don't have to make
