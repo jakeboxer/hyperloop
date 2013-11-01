@@ -78,8 +78,7 @@ They'll be included in all your views, so long as you have these two tags:
 <!-- I suggest putting this in between <head> and </head> -->
 <link href="/assets/app.css" media="all" rel="stylesheet" type="text/css">
 
-<!-- Minds more intelligent than mine suggest putting this at the end of the document body -->
-<!-- As in, right before </body> -->
+<!-- I suggest putting this at the end of the document body (as in, right before </body>) -->
 <script src="/assets/app.js" type="text/javascript"></script>
 ```
 
