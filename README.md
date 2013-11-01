@@ -59,8 +59,7 @@ If you create `app/views/_some_section.html.erb`, you'll be able to load it as a
 ```
 
 Note: In Rails, it's `<%= render :partial => "some_section" %>`, since there are other things you could want to render
-besides a partial. In Hyperloop, there aren't, so the options hash isn't necessary. If enough people complain, I might
-make it accept the hash version too.
+besides a partial. In Hyperloop, there aren't, so the options hash isn't necessary.
 
 ### CSS, SCSS, Sass, JavaScript, and CoffeeScript
 
