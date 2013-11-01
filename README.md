@@ -48,7 +48,15 @@ Your layout is in `app/views/layouts/application.html.erb`.
 Your site root is in `app/views/index.html.erb`.
 
 If you create `app/views/hello.html.erb`, you'll be able to get to it by going to
-[http://localhost:3000/hello](http://localhost:3000/hello).
+[http://localhost:3000/hello/](http://localhost:3000/hello/).
+
+### Subdirectories
+
+You can nest views in subdirectories. If you create the following files, the following URLs will work:
+
+- `app/views/people/ted_nyman.html.erb` will make [http://localhost:3000/people/ted_nyman/](http://localhost:3000/people/ted_nyman/) work.
+- `app/views/people/index.html.erb` will make [http://localhost:3000/people/](http://localhost:3000/people/) work.
+- `app/views/projects/2013/yeezus.html.erb` will make [http://localhost:3000/projects/2013/yeezus/](http://localhost:3000/projects/2013/yeezus/) work.
 
 ### Partials
 
