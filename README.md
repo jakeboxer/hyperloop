@@ -66,8 +66,10 @@ besides a partial. In Hyperloop, there aren't, so the options hash isn't necessa
 If you create some files like:
 
 ```
+app/assets/stylesheets/bootstrap.css
 app/assets/stylesheets/stylez1.css
 app/assets/stylesheets/stylez2.scss
+app/assets/javascripts/jquery.js
 app/assets/javascripts/scriptz1.js
 app/assets/javascripts/scriptz2.coffee
 ```
@@ -82,7 +84,7 @@ They'll be included in all your views, so long as you have these two tags:
 <script src="/assets/app.js" type="text/javascript"></script>
 ```
 
-somewhere in your layout.
+somewhere in your layout. All your CSS and JS assets belong in these folders, including vendored ones like jQuery and Bootstrap.
 
 ### Images
 
