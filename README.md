@@ -6,8 +6,8 @@ Before you keep reading, let's get one thing out of the way:
 
 ### If you think your website might need a database, do not use Hyperloop.
 
-I came up with the idea for Hyperloop after hearing one too many competent web developers say "I don't even know how to
-set up a regular website anymore."
+I came up with the idea for Hyperloop after hearing one too many experienced web developers say "I don't even know how
+to set up a regular website anymore."
 
 With Hyperloop, you can create a new site just like you would with Rails. You can write ERB and Sass and CoffeeScript
 and all that other good shit. You can use layouts and partials and deploy to Heroku.
