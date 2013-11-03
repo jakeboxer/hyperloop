@@ -86,17 +86,17 @@ They'll be included in all your views, so long as you have these two tags:
 
 ``` html
 <!-- I suggest putting this in between <head> and </head> -->
-<link href="/assets/app.css" media="all" rel="stylesheet" type="text/css">
+<link href="/assets/stylesheets/app.css" media="all" rel="stylesheet" type="text/css">
 
 <!-- I suggest putting this at the end of the document body (as in, right before </body>) -->
-<script src="/assets/app.js" type="text/javascript"></script>
+<script src="/assets/javascripts/app.js" type="text/javascript"></script>
 ```
 
 somewhere in your layout. All your CSS and JS assets belong in these folders, including vendored ones like jQuery and Bootstrap.
 
 ### Images
 
-If you create `app/assets/images/photo.jpg`, you'll be able to show it in a view with `<img src="/assets/photo.jpg">`.
+If you create `app/assets/images/photo.jpg`, you'll be able to show it in a view with `<img src="/assets/images/photo.jpg">`.
 
 ## Contributing
 
