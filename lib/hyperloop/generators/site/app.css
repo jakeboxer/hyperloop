@@ -1,2 +1,2 @@
-//= require stylesheets/bootstrap
-//= require_tree
+//= require_tree ../../../vendor/assets/stylesheets
+//= require_tree .
