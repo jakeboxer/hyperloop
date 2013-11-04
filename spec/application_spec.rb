@@ -157,6 +157,11 @@ describe Hyperloop::Application do
       expect(response).to be_not_found
     end
 
+    it "404s on a request for an asset namespaced by an unknown type" do
+      response = @request.get("/assets/shouldfail/shouldfail.css")
+      expect(response).to be_not_found
+    end
+
     it "404s on a request for a nonexistent asset" do
       response = @request.get("/assets/javascripts/nonexistent.js")
 
