@@ -1,1 +1,1 @@
-alert("i am vendored")
+alert("i am vendored");
