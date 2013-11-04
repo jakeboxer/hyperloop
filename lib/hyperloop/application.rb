@@ -49,7 +49,8 @@ module Hyperloop
     # Returns a Sprockets::Environment.
     def assets
       @assets ||= Sprockets::Environment.new do |env|
-        env.append_path(@root + "/app/assets")
+        env.append_path(File.join(@root, "app", "assets"))
+        env.append_path(File.join(@root, "vendor", "assets"))
 
         # compress everything in production
         if ENV["RACK_ENV"] == "production"
