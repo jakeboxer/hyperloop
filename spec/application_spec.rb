@@ -123,6 +123,22 @@ describe Hyperloop::Application do
       expect(response.body).to match(/alert\("such javascript wow"\)/)
     end
 
+    it "responds successfully to a request for a vendored css file" do
+      response = @request.get("/assets/stylesheets/vendored.css")
+
+      expect(response).to be_ok
+      expect(response.content_type).to eql("text/css")
+      expect(response.body).to match(/margin: ?0/)
+    end
+
+    it "responds successfully to a request for a vendored javascript bundle" do
+      response = @request.get("/assets/javascripts/vendored.js")
+
+      expect(response).to be_ok
+      expect(response.content_type).to eql("application/javascript")
+      expect(response.body).to match(/alert\("i am vendored"\)/)
+    end
+
     it "responds successfully to a request for a gif" do
       response = @request.get("/assets/images/my-gif.gif")
 
