@@ -13,17 +13,15 @@ module Hyperloop
 
     # Rack call interface.
     def call(env)
-      request      = Rack::Request.new(env)
-      response     = Response.new
-      request_path = normalized_request_path(request.path)
-      filename     = File.basename(request.path)
+      request  = Rack::Request.new(env)
+      response = Response.new
 
-      if self.class.asset_path?(request_path) && asset = assets[filename]
+      if self.class.asset_path?(request.path) && asset = assets[normalized_asset_path(request.path)]
         # If the path is for an asset, find the specified asset and use its data
         # as the response body.
         response["Content-Type"] = asset.content_type
         response.write(asset.source)
-      elsif view = @view_registry.find_template_view(request_path)
+      elsif view = @view_registry.find_template_view(normalized_request_path(request.path))
         # If there's a view at the path, use its data as the response body.
         data = view.render(request)
         response.write(data)
@@ -43,7 +41,7 @@ module Hyperloop
     #
     # Returns a boolean.
     def self.asset_path?(path)
-      path.start_with?("/assets/")
+      path =~ /^\/assets\/(images|javascripts|stylesheets)\//
     end
 
     # Internal: The sprockets environment for the app.
@@ -51,9 +49,8 @@ module Hyperloop
     # Returns a Sprockets::Environment.
     def assets
       @assets ||= Sprockets::Environment.new do |env|
-        env.append_path(@root + "/app/assets/images")
-        env.append_path(@root + "/app/assets/javascripts")
-        env.append_path(@root + "/app/assets/stylesheets")
+        env.append_path(File.join(@root, "app", "assets"))
+        env.append_path(File.join(@root, "vendor", "assets"))
 
         # compress everything in production
         if ENV["RACK_ENV"] == "production"
@@ -61,6 +58,15 @@ module Hyperloop
           env.css_compressor = YUI::CssCompressor.new
         end
       end
+    end
+
+    # Internal: Get a normalized version of the specified asset path.
+    #
+    # path - Asset path to normalize
+    #
+    # Returns a string.
+    def normalized_asset_path(path)
+      path.sub(/^\/assets\//, "")
     end
 
     # Internal: Get a normalized version of the specified request path.

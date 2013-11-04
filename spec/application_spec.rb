@@ -108,7 +108,7 @@ describe Hyperloop::Application do
     end
 
     it "responds successfully to a request for the css app bundle" do
-      response = @request.get("/assets/app.css")
+      response = @request.get("/assets/stylesheets/app.css")
 
       expect(response).to be_ok
       expect(response.content_type).to eql("text/css")
@@ -116,15 +116,31 @@ describe Hyperloop::Application do
     end
 
     it "responds successfully to a request for the javascript app bundle" do
-      response = @request.get("/assets/app.js")
+      response = @request.get("/assets/javascripts/app.js")
 
       expect(response).to be_ok
       expect(response.content_type).to eql("application/javascript")
       expect(response.body).to match(/alert\("such javascript wow"\)/)
     end
 
+    it "responds successfully to a request for a vendored css file" do
+      response = @request.get("/assets/stylesheets/vendored.css")
+
+      expect(response).to be_ok
+      expect(response.content_type).to eql("text/css")
+      expect(response.body).to match(/margin: ?0/)
+    end
+
+    it "responds successfully to a request for a vendored javascript bundle" do
+      response = @request.get("/assets/javascripts/vendored.js")
+
+      expect(response).to be_ok
+      expect(response.content_type).to eql("application/javascript")
+      expect(response.body).to match(/alert\("i am vendored"\)/)
+    end
+
     it "responds successfully to a request for a gif" do
-      response = @request.get("/assets/my-gif.gif")
+      response = @request.get("/assets/images/my-gif.gif")
 
       expect(response).to be_ok
       expect(response.content_type).to eql("image/gif")
@@ -132,7 +148,7 @@ describe Hyperloop::Application do
     end
 
     it "responds successfully to a request for a jpg" do
-      response = @request.get("/assets/my-jpg.jpg")
+      response = @request.get("/assets/images/my-jpg.jpg")
 
       expect(response).to be_ok
       expect(response.content_type).to eql("image/jpeg")
@@ -140,15 +156,30 @@ describe Hyperloop::Application do
     end
 
     it "responds successfully to a request for a png" do
-      response = @request.get("/assets/my-png.png")
+      response = @request.get("/assets/images/my-png.png")
 
       expect(response).to be_ok
       expect(response.content_type).to eql("image/png")
       expect(Digest::SHA1.hexdigest(response.body)).to eql("adf65c25a8e3e39c49ecf581433278d7eac4d1a2")
     end
 
+    it "404s on a request for an asset without namespacing by type" do
+      response = @request.get("/assets/app.js")
+      expect(response).to be_not_found
+    end
+
+    it "404s on a request for an asset namespaced by the wrong type" do
+      response = @request.get("/assets/stylesheets/app.js")
+      expect(response).to be_not_found
+    end
+
+    it "404s on a request for an asset namespaced by an unknown type" do
+      response = @request.get("/assets/shouldfail/shouldfail.css")
+      expect(response).to be_not_found
+    end
+
     it "404s on a request for a nonexistent asset" do
-      response = @request.get("/assets/nonexistent.js")
+      response = @request.get("/assets/javascripts/nonexistent.js")
 
       expect(response).to be_not_found
     end
