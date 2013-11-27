@@ -281,5 +281,63 @@ describe Hyperloop::Application do
         expect(text_in(response.body, "h2")).to eql("Changed")
       end
     end
+
+    context "in production" do
+      before :each do
+        set_rack_env :production
+      end
+
+      after :each do
+        reset_rack_env
+      end
+
+      it "doesn't reload changed assets" do
+        root    = prepare_fixture(:assets)
+        app     = Hyperloop::Application.new(root)
+        request = Rack::MockRequest.new(app)
+
+        # On the first request, stylesheet should have `display: block` and not
+        # `display: inline`.
+        response = request.get("/assets/stylesheets/app.css")
+        expect(response).to be_ok
+        expect(response.body).to match(/display: ?block/)
+        expect(response.body).not_to match(/display: ?inline/)
+
+        # Load layout and change the title to "Changed"
+        asset_path = File.join(root, "app", "assets", "stylesheets", "my-styles.scss")
+        asset_data = File.read(asset_path)
+        asset_data.sub!("display: block", "display: inline")
+        File.write(asset_path, asset_data)
+
+        # On the second request, stylesheet should still have `display: inline`
+        # and not `display: block`.
+        response = request.get("/assets/stylesheets/app.css")
+        expect(response).to be_ok
+        expect(response.body).to match(/display: ?block/)
+        expect(response.body).not_to match(/display: ?inline/)
+      end
+
+      it "doesn't reload changed views" do
+        root    = prepare_fixture(:erb)
+        app     = Hyperloop::Application.new(root)
+        request = Rack::MockRequest.new(app)
+
+        # On the first request, <title> text should be "ERB"
+        response = request.get("/")
+        expect(response).to be_ok
+        expect(text_in(response.body, "title")).to eql("ERB")
+
+        # Load index.html.erb and change the title to "Changed"
+        index_file_path = File.join(root, "app", "views", "index.html.erb")
+        index_file_data = File.read(index_file_path)
+        index_file_data.sub!(/<h2>[^<]*<\/h2>/, "<h2>Changed</h2>")
+        File.write(index_file_path, index_file_data)
+
+        # On the second request, <title> text should still be "ERB"
+        response = request.get("/")
+        expect(response).to be_ok
+        expect(text_in(response.body, "title")).to eql("ERB")
+      end
+    end
   end
 end

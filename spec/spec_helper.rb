@@ -42,6 +42,30 @@ module Helpers
     tmp_root
   end
 
+  # Public: Set the RACK_ENV environment variable back to whatever it was when
+  # the spec started running. If RACK_ENV wasn't set before the spec started
+  # running, it will be deleted.
+  #
+  # Returns nothing.
+  def reset_rack_env
+    if defined?(@old_rack_env)
+      ENV["RACK_ENV"] = @old_rack_env
+    else
+      ENV.delete("RACK_ENV")
+    end
+  end
+
+  # Public: Set the RACK_ENV environment variable to the specified value.
+  #
+  # name - Symbol environment name to set RACK_ENV to. Should be :development,
+  #        :test, or :production.
+  #
+  # Returns nothing.
+  def set_rack_env(name)
+    @old_rack_env = ENV["RACK_ENV"] if ENV.key?("RACK_ENV")
+    ENV["RACK_ENV"] = name.to_s
+  end
+
   def text_in(html_str, selector)
     node = html(html_str).at_css(selector)
     node && node.text
