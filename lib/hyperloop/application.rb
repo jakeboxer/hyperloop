@@ -7,21 +7,21 @@ module Hyperloop
     include Rack::Utils
 
     def initialize(root=nil)
-      @root          = root
-      @view_registry = View::Registry.new(@root)
+      @root = root
     end
 
     # Rack call interface.
     def call(env)
-      request  = Rack::Request.new(env)
-      response = Response.new
+      view_registry = View::Registry.new(@root)
+      request       = Rack::Request.new(env)
+      response      = Response.new
 
       if self.class.asset_path?(request.path) && asset = assets[normalized_asset_path(request.path)]
         # If the path is for an asset, find the specified asset and use its data
         # as the response body.
         response["Content-Type"] = asset.content_type
         response.write(asset.source)
-      elsif view = @view_registry.find_template_view(normalized_request_path(request.path))
+      elsif view = view_registry.find_template_view(normalized_request_path(request.path))
         # If there's a view at the path, use its data as the response body.
         data = view.render(request)
         response.write(data)
