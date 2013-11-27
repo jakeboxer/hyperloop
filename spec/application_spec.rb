@@ -188,4 +188,30 @@ describe Hyperloop::Application do
       expect(response).to be_not_found
     end
   end
+
+  describe "live reloading" do
+    before :each do
+      @root    = prepare_fixture(:erb)
+      @app     = Hyperloop::Application.new(@root)
+      @request = Rack::MockRequest.new(@app)
+    end
+
+    it "reloads views when they're changed" do
+      # On the first request, title should be "ERB"
+      response = @request.get("/")
+      expect(response).to be_ok
+      expect(text_in(response.body, "title")).to eql("ERB")
+
+      # Load index.html.erb and change the title to "Changed"
+      index_file_path = File.join(@root, "app", "views", "index.html.erb")
+      index_file_data = File.read(index_file_path)
+      index_file_data.sub!("<title>ERB</title>", "<title>Changed</title>")
+      File.write(index_file_path, index_file_data)
+
+      # On the second request, title should be "Changed"
+      response = @request.get("/")
+      expect(response).to be_ok
+      expect(text_in(response.body, "title")).to eql("Changed")
+    end
+  end
 end
