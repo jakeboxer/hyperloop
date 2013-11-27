@@ -330,7 +330,7 @@ describe Hyperloop::Application do
         # Load index.html.erb and change the title to "Changed"
         index_file_path = File.join(root, "app", "views", "index.html.erb")
         index_file_data = File.read(index_file_path)
-        index_file_data.sub!(/<h2>[^<]*<\/h2>/, "<h2>Changed</h2>")
+        index_file_data.sub!("<title>ERB</title>", "<title>Changed</title>")
         File.write(index_file_path, index_file_data)
 
         # On the second request, <title> text should still be "ERB"
