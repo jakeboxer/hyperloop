@@ -196,6 +196,24 @@ describe Hyperloop::Application do
       @request = Rack::MockRequest.new(@app)
     end
 
+    it "reloads layouts when they're changed" do
+      # On the first request, <title> text should not be "Changed"
+      response = @request.get("/")
+      expect(response).to be_ok
+      expect(text_in(response.body, "title")).not_to eql("Changed")
+
+      # Load layout and change the title to "Changed"
+      layout_path = File.join(@root, "app", "views", "layouts", "application.html.erb")
+      layout_data = File.read(layout_path)
+      layout_data.sub!(/<title>[^<]*<\/title>/, "<title>Changed</title>")
+      File.write(layout_path, layout_data)
+
+      # On the second request, <title> text should be "Changed"
+      response = @request.get("/")
+      expect(response).to be_ok
+      expect(text_in(response.body, "title")).to eql("Changed")
+    end
+
     it "reloads views when they're changed" do
       # On the first request, <h2> text should not be "Changed"
       response = @request.get("/")
