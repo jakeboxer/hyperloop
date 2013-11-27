@@ -24,6 +24,18 @@ module Helpers
   #                :replacement - (Required) String to replace the found pattern
   #                               with.
   #
+  # Examples:
+  #
+  #   change_fixture("tmp/spec/fixtures/erb", "app/views/index.html.erb",
+  #     :pattern     => "<title>ERB</title>",
+  #     :replacement => "<title>Changed</title>"
+  #   )
+  #
+  #   change_fixture("tmp/spec/fixtures/erb", "app/views/index.html.erb",
+  #     :pattern     => /<title>[^<]*<\/title>/,
+  #     :replacement => "<title>Changed</title>"
+  #   )
+  #
   # Returns nothing.
   def change_fixture(fixture_path, file_path, options = {})
     pattern     = options[:pattern]
