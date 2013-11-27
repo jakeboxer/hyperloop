@@ -65,6 +65,13 @@ module Helpers
   # name - Symbol name of the fixture to prepare. The name passed here will be
   #        looked up in the spec/fixtures directory.
   #
+  # Note:
+  #
+  #   This method exists along with change_fixture and cleanup_fixtures. If
+  #   these get used a lot more or more fixture-related functionality is added,
+  #   it may make sense to extract a Fixture class and move these methods into
+  #   it.
+  #
   # Returns a string filepath representing the new location of the prepared
   # fixture.
   def prepare_fixture(name)
