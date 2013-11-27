@@ -79,7 +79,9 @@ module Helpers
     contents = File.join(root, ".")
     tmp_root = File.join("tmp", root)
 
-    # Create the tmp/spec/fixtures/:name directory and copy the fixture into it.
+    # Delete and recreate the tmp/spec/fixtures/:name directory, then copy the
+    # fixture into it.
+    FileUtils.rm_rf(tmp_root)
     FileUtils.mkdir_p(tmp_root)
     FileUtils.cp_r(contents, tmp_root)
 
@@ -119,8 +121,8 @@ module Helpers
     @mock_app ||= double("rack app", :call => Hyperloop::Response.new.finish )
   end
 
-  def mock_request
-    Rack::MockRequest.new(mock_app)
+  def mock_request(app = nil)
+    Rack::MockRequest.new(app || mock_app)
   end
 end
 
