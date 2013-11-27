@@ -276,30 +276,6 @@ describe Hyperloop::Application do
         reset_rack_env
       end
 
-      it "doesn't reload changed assets" do
-        root = prepare_fixture(:assets)
-        app  = Hyperloop::Application.new(root)
-
-        # On the first request, stylesheet should have `display: block` and not
-        # `display: inline`.
-        response = mock_request(app).get("/assets/stylesheets/app.css")
-        expect(response).to be_ok
-        expect(response.body).to match(/display: ?block/)
-        expect(response.body).not_to match(/display: ?inline/)
-
-        change_fixture(root, "app/assets/stylesheets/my-styles.scss",
-          :pattern     => "display: block",
-          :replacement => "display: inline"
-        )
-
-        # On the second request, stylesheet should still have `display: block`
-        # and not `display: inline`.
-        response = mock_request(app).get("/assets/stylesheets/app.css")
-        expect(response).to be_ok
-        expect(response.body).to match(/display: ?block/)
-        expect(response.body).not_to match(/display: ?inline/)
-      end
-
       it "doesn't reload changed views" do
         root = prepare_fixture(:erb)
         app  = Hyperloop::Application.new(root)
