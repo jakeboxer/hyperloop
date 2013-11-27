@@ -42,7 +42,7 @@ describe Hyperloop::Application do
 
   describe "with subdirectories" do
     before :each do
-      @app     = Hyperloop::Application.new("spec/fixtures/subdirectories/")
+      @app     = Hyperloop::Application.new(prepare_fixture(:subdirectories))
       @request = Rack::MockRequest.new(@app)
     end
 
@@ -63,7 +63,7 @@ describe Hyperloop::Application do
 
   describe "with ERB" do
     before :each do
-      @app     = Hyperloop::Application.new("spec/fixtures/erb/")
+      @app     = Hyperloop::Application.new(prepare_fixture(:erb))
       @request = Rack::MockRequest.new(@app)
     end
 
@@ -77,7 +77,7 @@ describe Hyperloop::Application do
 
   describe "with a layout" do
     before :each do
-      @app     = Hyperloop::Application.new("spec/fixtures/layouts/")
+      @app     = Hyperloop::Application.new(prepare_fixture(:layouts))
       @request = Rack::MockRequest.new(@app)
     end
 
@@ -100,7 +100,7 @@ describe Hyperloop::Application do
 
   describe "with assets" do
     before :each do
-      @app     = Hyperloop::Application.new("spec/fixtures/assets/")
+      @app     = Hyperloop::Application.new(prepare_fixture(:assets))
       @request = Rack::MockRequest.new(@app)
     end
 
