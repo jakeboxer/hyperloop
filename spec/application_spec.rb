@@ -190,68 +190,78 @@ describe Hyperloop::Application do
   end
 
   describe "live reloading" do
-    before :each do
-      @root    = prepare_fixture(:assets)
-      @app     = Hyperloop::Application.new(@root)
-      @request = Rack::MockRequest.new(@app)
+    context "with assets" do
+      before :each do
+        @root    = prepare_fixture(:assets)
+        @app     = Hyperloop::Application.new(@root)
+        @request = Rack::MockRequest.new(@app)
+      end
+
+      it "reloads changed assets" do
+        # On the first request, stylesheet should have `display: block;` and not
+        # `display: inline;`.
+        response = @request.get("/assets/stylesheets/app.css")
+        expect(response).to be_ok
+        expect(response.body).to match(/display: ?block;/)
+        expect(response.body).not_to match(/display: ?inline;/)
+
+        # Load layout and change the title to "Changed"
+        asset_path = File.join(@root, "app", "assets", "stylesheets", "my-styles.scss")
+        asset_data = File.read(asset_path)
+        asset_data.sub!("display: block;", "display: inline;")
+        File.write(asset_path, asset_data)
+
+        # On the second request, stylesheet should have `display: inline;` and not
+        # `display: block;`.
+        response = @request.get("/assets/stylesheets/app.css")
+        expect(response).to be_ok
+        expect(response.body).to match(/display: ?inline;/)
+        expect(response.body).not_to match(/display: ?block;/)
+      end
     end
 
-    it "reloads assets when they're changed" do
-      # On the first request, stylesheet should have `display: block;` and not
-      # `display: inline;`.
-      response = @request.get("/assets/stylesheets/app.css")
-      expect(response).to be_ok
-      expect(response.body).to match(/display: ?block;/)
-      expect(response.body).not_to match(/display: ?inline;/)
+    context "with views" do
+      before :each do
+        @root    = prepare_fixture(:partials)
+        @app     = Hyperloop::Application.new(@root)
+        @request = Rack::MockRequest.new(@app)
+      end
 
-      # Load layout and change the title to "Changed"
-      asset_path = File.join(@root, "app", "assets", "stylesheets", "my-styles.scss")
-      asset_data = File.read(asset_path)
-      asset_data.sub!("display: block;", "display: inline;")
-      File.write(asset_path, asset_data)
+      it "reloads changed layouts" do
+        # On the first request, <title> text should not be "Changed"
+        response = @request.get("/")
+        expect(response).to be_ok
+        expect(text_in(response.body, "title")).not_to eql("Changed")
 
-      # On the second request, stylesheet should have `display: inline;` and not
-      # `display: block;`.
-      response = @request.get("/assets/stylesheets/app.css")
-      expect(response).to be_ok
-      expect(response.body).to match(/display: ?inline;/)
-      expect(response.body).not_to match(/display: ?block;/)
-    end
+        # Load layout and change the title to "Changed"
+        layout_path = File.join(@root, "app", "views", "layouts", "application.html.erb")
+        layout_data = File.read(layout_path)
+        layout_data.sub!(/<title>[^<]*<\/title>/, "<title>Changed</title>")
+        File.write(layout_path, layout_data)
 
-    it "reloads layouts when they're changed" do
-      # On the first request, <title> text should not be "Changed"
-      response = @request.get("/")
-      expect(response).to be_ok
-      expect(text_in(response.body, "title")).not_to eql("Changed")
+        # On the second request, <title> text should be "Changed"
+        response = @request.get("/")
+        expect(response).to be_ok
+        expect(text_in(response.body, "title")).to eql("Changed")
+      end
 
-      # Load layout and change the title to "Changed"
-      layout_path = File.join(@root, "app", "views", "layouts", "application.html.erb")
-      layout_data = File.read(layout_path)
-      layout_data.sub!(/<title>[^<]*<\/title>/, "<title>Changed</title>")
-      File.write(layout_path, layout_data)
+      it "reloads changed views" do
+        # On the first request, <h2> text should not be "Changed"
+        response = @request.get("/")
+        expect(response).to be_ok
+        expect(text_in(response.body, "h2")).not_to eql("Changed")
 
-      # On the second request, <title> text should be "Changed"
-      response = @request.get("/")
-      expect(response).to be_ok
-      expect(text_in(response.body, "title")).to eql("Changed")
-    end
+        # Load index.html.erb and change the title to "Changed"
+        index_file_path = File.join(@root, "app", "views", "index.html.erb")
+        index_file_data = File.read(index_file_path)
+        index_file_data.sub!(/<h2>[^<]*<\/h2>/, "<h2>Changed</h2>")
+        File.write(index_file_path, index_file_data)
 
-    it "reloads views when they're changed" do
-      # On the first request, <h2> text should not be "Changed"
-      response = @request.get("/")
-      expect(response).to be_ok
-      expect(text_in(response.body, "h2")).not_to eql("Changed")
-
-      # Load index.html.erb and change the title to "Changed"
-      index_file_path = File.join(@root, "app", "views", "index.html.erb")
-      index_file_data = File.read(index_file_path)
-      index_file_data.sub!(/<h2>[^<]*<\/h2>/, "<h2>Changed</h2>")
-      File.write(index_file_path, index_file_data)
-
-      # On the second request, <h2> text should be "Changed"
-      response = @request.get("/")
-      expect(response).to be_ok
-      expect(text_in(response.body, "h2")).to eql("Changed")
+        # On the second request, <h2> text should be "Changed"
+        response = @request.get("/")
+        expect(response).to be_ok
+        expect(text_in(response.body, "h2")).to eql("Changed")
+      end
     end
   end
 end
