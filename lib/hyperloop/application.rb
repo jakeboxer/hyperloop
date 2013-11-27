@@ -96,15 +96,8 @@ module Hyperloop
     #
     # Returns a Hyperloop::View::Registry
     def view_registry
-      return @view_registry if @view_registry
-
-      registry = View::Registry.new(@root)
-
-      # Memoize if we're in production so we don't reload views on every
-      # request.
-      @view_registry = registry if production?
-
-      registry
+      @view_registry = nil unless production?
+      @view_registry ||= View::Registry.new(@root)
     end
   end
 end
