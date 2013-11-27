@@ -304,8 +304,8 @@ describe Hyperloop::Application do
           :replacement => "display: inline"
         )
 
-        # On the second request, stylesheet should still have `display: inline`
-        # and not `display: block`.
+        # On the second request, stylesheet should still have `display: block`
+        # and not `display: inline`.
         response = request.get("/assets/stylesheets/app.css")
         expect(response).to be_ok
         expect(response.body).to match(/display: ?block/)
