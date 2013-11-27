@@ -48,16 +48,24 @@ module Hyperloop
     #
     # Returns a Sprockets::Environment.
     def assets
-      Sprockets::Environment.new do |env|
+      return @assets if @assets
+
+      sprockets_env = Sprockets::Environment.new do |env|
         env.append_path(File.join(@root, "app", "assets"))
         env.append_path(File.join(@root, "vendor", "assets"))
 
         # compress everything in production
-        if ENV["RACK_ENV"] == "production"
+        if production?
           env.js_compressor  = YUI::JavaScriptCompressor.new(:munge => true)
           env.css_compressor = YUI::CssCompressor.new
         end
       end
+
+      # Memoize if we're in production so we don't reload assets on every
+      # request.
+      @assets = sprockets_env if production?
+
+      sprockets_env
     end
 
     # Internal: Get a normalized version of the specified asset path.
@@ -80,6 +88,13 @@ module Hyperloop
       else
         path.chomp("/")
       end
+    end
+
+    # Internal: Are we running in production mode?
+    #
+    # Returns a boolean.
+    def production?
+      ENV["RACK_ENV"] == "production"
     end
   end
 end
