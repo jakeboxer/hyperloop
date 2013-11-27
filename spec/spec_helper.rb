@@ -12,6 +12,31 @@ module Helpers
     FileUtils.rm_rf(tmp_fixtures_dir)
   end
 
+  # Public: Change the contents of a file in a fixture.
+  #
+  # fixture_path - Path to the fixture containing the file we want to change.
+  # file_path    - Path (relative to fixture_path) of the file we want to
+  #                change.
+  # options      - Hash containing the following keys:
+  #                :pattern     - (Required) Regexp or String to find in the
+  #                               file. Only the first occurrence will be
+  #                               matched.
+  #                :replacement - (Required) String to replace the found pattern
+  #                               with.
+  #
+  # Returns nothing.
+  def change_fixture(fixture_path, file_path, options = {})
+    pattern     = options[:pattern]
+    replacement = options[:replacement]
+
+    raise ArgumentError, "change_fixture must include a :pattern option" unless pattern
+    raise ArgumentError, "change_fixture must include a :replacement option" unless replacement
+
+    full_file_path = File.join(fixture_path, file_path)
+    data           = File.read(full_file_path).sub(pattern, replacement)
+    File.write(full_file_path, data)
+  end
+
   def html(str)
     Nokogiri::HTML(str)
   end

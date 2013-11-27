@@ -205,11 +205,10 @@ describe Hyperloop::Application do
         expect(response.body).to match(/display: ?block/)
         expect(response.body).not_to match(/display: ?inline/)
 
-        # Load layout and change the title to "Changed"
-        asset_path = File.join(@root, "app", "assets", "stylesheets", "my-styles.scss")
-        asset_data = File.read(asset_path)
-        asset_data.sub!("display: block", "display: inline")
-        File.write(asset_path, asset_data)
+        change_fixture(@root, "app/assets/stylesheets/my-styles.scss",
+          :pattern     => "display: block",
+          :replacement => "display: inline"
+        )
 
         # On the second request, stylesheet should have `display: inline` and not
         # `display: block`.
@@ -233,11 +232,10 @@ describe Hyperloop::Application do
         expect(response).to be_ok
         expect(text_in(response.body, "title")).not_to eql("Changed")
 
-        # Load layout and change the title to "Changed"
-        layout_path = File.join(@root, "app", "views", "layouts", "application.html.erb")
-        layout_data = File.read(layout_path)
-        layout_data.sub!(/<title>[^<]*<\/title>/, "<title>Changed</title>")
-        File.write(layout_path, layout_data)
+        change_fixture(@root, "app/views/layouts/application.html.erb",
+          :pattern     => /<title>[^<]*<\/title>/,
+          :replacement => "<title>Changed</title>"
+        )
 
         # On the second request, <title> text should be "Changed"
         response = @request.get("/")
@@ -251,11 +249,10 @@ describe Hyperloop::Application do
         expect(response).to be_ok
         expect(text_in(response.body, "p.spec-in-partial")).not_to eql("Changed")
 
-        # Load partial and change the <p> to "Changed"
-        partial_path = File.join(@root, "app", "views", "subdir", "_partial.html.erb")
-        partial_data = File.read(partial_path)
-        partial_data.sub!(/<p class="spec-in-partial">[^<]*<\/p>/, "<p class=\"spec-in-partial\">Changed</p>")
-        File.write(partial_path, partial_data)
+        change_fixture(@root, "app/views/subdir/_partial.html.erb",
+          :pattern     => /<p class="spec-in-partial">[^<]*<\/p>/,
+          :replacement => "<p class=\"spec-in-partial\">Changed</p>"
+        )
 
         # On the second request, <p> text should be "Changed"
         response = @request.get("/")
@@ -269,11 +266,10 @@ describe Hyperloop::Application do
         expect(response).to be_ok
         expect(text_in(response.body, "h2")).not_to eql("Changed")
 
-        # Load index.html.erb and change the title to "Changed"
-        index_file_path = File.join(@root, "app", "views", "index.html.erb")
-        index_file_data = File.read(index_file_path)
-        index_file_data.sub!(/<h2>[^<]*<\/h2>/, "<h2>Changed</h2>")
-        File.write(index_file_path, index_file_data)
+        change_fixture(@root, "app/views/index.html.erb",
+          :pattern     => /<h2>[^<]*<\/h2>/,
+          :replacement => "<h2>Changed</h2>"
+        )
 
         # On the second request, <h2> text should be "Changed"
         response = @request.get("/")
@@ -303,11 +299,10 @@ describe Hyperloop::Application do
         expect(response.body).to match(/display: ?block/)
         expect(response.body).not_to match(/display: ?inline/)
 
-        # Load layout and change the title to "Changed"
-        asset_path = File.join(root, "app", "assets", "stylesheets", "my-styles.scss")
-        asset_data = File.read(asset_path)
-        asset_data.sub!("display: block", "display: inline")
-        File.write(asset_path, asset_data)
+        change_fixture(root, "app/assets/stylesheets/my-styles.scss",
+          :pattern     => "display: block",
+          :replacement => "display: inline"
+        )
 
         # On the second request, stylesheet should still have `display: inline`
         # and not `display: block`.
@@ -327,11 +322,10 @@ describe Hyperloop::Application do
         expect(response).to be_ok
         expect(text_in(response.body, "title")).to eql("ERB")
 
-        # Load index.html.erb and change the title to "Changed"
-        index_file_path = File.join(root, "app", "views", "index.html.erb")
-        index_file_data = File.read(index_file_path)
-        index_file_data.sub!("<title>ERB</title>", "<title>Changed</title>")
-        File.write(index_file_path, index_file_data)
+        change_fixture(root, "app/views/index.html.erb",
+          :pattern     => "<title>ERB</title>",
+          :replacement => "<title>Changed</title>"
+        )
 
         # On the second request, <title> text should still be "ERB"
         response = request.get("/")
