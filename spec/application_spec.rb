@@ -245,6 +245,24 @@ describe Hyperloop::Application do
         expect(text_in(response.body, "title")).to eql("Changed")
       end
 
+      it "reloads changed partials" do
+        # On the first request, <p> text should not be "Changed"
+        response = @request.get("/")
+        expect(response).to be_ok
+        expect(text_in(response.body, "p.spec-in-partial")).not_to eql("Changed")
+
+        # Load partial and change the <p> to "Changed"
+        partial_path = File.join(@root, "app", "views", "subdir", "_partial.html.erb")
+        partial_data = File.read(partial_path)
+        partial_data.sub!(/<p class="spec-in-partial">[^<]*<\/p>/, "<p class=\"spec-in-partial\">Changed</p>")
+        File.write(partial_path, partial_data)
+
+        # On the second request, <p> text should be "Changed"
+        response = @request.get("/")
+        expect(response).to be_ok
+        expect(text_in(response.body, "p.spec-in-partial")).to eql("Changed")
+      end
+
       it "reloads changed views" do
         # On the first request, <h2> text should not be "Changed"
         response = @request.get("/")
