@@ -12,9 +12,8 @@ module Hyperloop
 
     # Rack call interface.
     def call(env)
-      view_registry = View::Registry.new(@root)
-      request       = Rack::Request.new(env)
-      response      = Response.new
+      request  = Rack::Request.new(env)
+      response = Response.new
 
       if self.class.asset_path?(request.path) && asset = assets[normalized_asset_path(request.path)]
         # If the path is for an asset, find the specified asset and use its data
@@ -95,6 +94,21 @@ module Hyperloop
     # Returns a boolean.
     def production?
       ENV["RACK_ENV"] == "production"
+    end
+
+    # Internal: The view registry to use for the app.
+    #
+    # Returns a Hyperloop::View::Registry
+    def view_registry
+      return @view_registry if @view_registry
+
+      registry = View::Registry.new(@root)
+
+      # Memoize if we're in production so we don't reload views on every
+      # request.
+      @view_registry = registry if production?
+
+      registry
     end
   end
 end
