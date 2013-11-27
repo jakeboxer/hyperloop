@@ -50,6 +50,8 @@ module Hyperloop
       return @assets if @assets
 
       sprockets_env = Sprockets::Environment.new do |env|
+        env.version = ENV["RACK_ENV"]
+
         env.append_path(File.join(@root, "app", "assets"))
         env.append_path(File.join(@root, "vendor", "assets"))
 

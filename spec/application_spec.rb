@@ -1,10 +1,6 @@
 require File.expand_path("../spec_helper", __FILE__)
 
 describe Hyperloop::Application do
-  after :each do
-    cleanup_fixtures
-  end
-
   describe "with a flat views directory" do
     before :each do
       @app = Hyperloop::Application.new(prepare_fixture(:simple))

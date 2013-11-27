@@ -44,9 +44,11 @@ module Helpers
     raise ArgumentError, "change_fixture must include a :pattern option" unless pattern
     raise ArgumentError, "change_fixture must include a :replacement option" unless replacement
 
-    full_file_path = File.join(fixture_path, file_path)
-    data           = File.read(full_file_path).sub(pattern, replacement)
-    File.write(full_file_path, data)
+    File.open(File.join(fixture_path, file_path), "r+") do |f|
+      data = f.read.sub(pattern, replacement)
+      f.rewind
+      f.write(data)
+    end
   end
 
   def html(str)
@@ -126,6 +128,12 @@ module Helpers
   end
 end
 
+ENV["RACK_ENV"] ||= "test"
+
 RSpec.configure do |c|
   c.include(Helpers)
+
+  c.after :all do
+    cleanup_fixtures
+  end
 end
