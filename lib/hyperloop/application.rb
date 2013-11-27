@@ -48,7 +48,7 @@ module Hyperloop
     #
     # Returns a Sprockets::Environment.
     def assets
-      @assets ||= Sprockets::Environment.new do |env|
+      Sprockets::Environment.new do |env|
         env.append_path(File.join(@root, "app", "assets"))
         env.append_path(File.join(@root, "vendor", "assets"))
 
