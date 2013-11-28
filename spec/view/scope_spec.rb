@@ -1,7 +1,7 @@
 describe Hyperloop::View::Scope do
   before :each do
     view_registry = Hyperloop::View::Registry.new("spec/fixtures/partials/")
-    @request      = Rack::MockRequest.new(mock_app)
+    @request      = mock_request
     @scope        = Hyperloop::View::Scope.new(@request, view_registry)
   end
 

@@ -7,8 +7,7 @@ module Hyperloop
     include Rack::Utils
 
     def initialize(root=nil)
-      @root          = root
-      @view_registry = View::Registry.new(@root)
+      @root = root
     end
 
     # Rack call interface.
@@ -21,7 +20,7 @@ module Hyperloop
         # as the response body.
         response["Content-Type"] = asset.content_type
         response.write(asset.source)
-      elsif view = @view_registry.find_template_view(normalized_request_path(request.path))
+      elsif view = view_registry.find_template_view(normalized_request_path(request.path))
         # If there's a view at the path, use its data as the response body.
         data = view.render(request)
         response.write(data)
@@ -48,12 +47,16 @@ module Hyperloop
     #
     # Returns a Sprockets::Environment.
     def assets
-      @assets ||= Sprockets::Environment.new do |env|
-        env.append_path(File.join(@root, "app", "assets"))
-        env.append_path(File.join(@root, "vendor", "assets"))
+      @assets = nil unless production?
+
+      @assets ||= Sprockets::Environment.new(@root) do |env|
+        env.version = ENV["RACK_ENV"]
+
+        env.append_path(File.join("app", "assets"))
+        env.append_path(File.join("vendor", "assets"))
 
         # compress everything in production
-        if ENV["RACK_ENV"] == "production"
+        if production?
           env.js_compressor  = YUI::JavaScriptCompressor.new(:munge => true)
           env.css_compressor = YUI::CssCompressor.new
         end
@@ -80,6 +83,21 @@ module Hyperloop
       else
         path.chomp("/")
       end
+    end
+
+    # Internal: Are we running in production mode?
+    #
+    # Returns a boolean.
+    def production?
+      ENV["RACK_ENV"] == "production"
+    end
+
+    # Internal: The view registry to use for the app.
+    #
+    # Returns a Hyperloop::View::Registry
+    def view_registry
+      @view_registry = nil unless production?
+      @view_registry ||= View::Registry.new(@root)
     end
   end
 end
