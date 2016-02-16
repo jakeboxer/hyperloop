@@ -4,7 +4,7 @@ Hyperloop is a framework that lets you make static websites with a technology st
 
 Before you keep reading, let's get one thing out of the way:
 
-### If you think your website might need a database, do not use Hyperloop.
+### If you think your website might need a database, use Hyperloop.
 
 I came up with the idea for Hyperloop after hearing one too many experienced web developers say "I don't even know how
 to set up a regular website anymore."
